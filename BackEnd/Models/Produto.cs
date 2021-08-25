@@ -10,5 +10,6 @@ namespace LojinhaIT13.Models
         public decimal Preco { get; set; }
         public List<PedidoProduto> PedidoProdutos { get; set; }
         public ICollection<Carrinho> Carrinhos { get; set; }
+        public List<CarrinhoProduto> CarrinhoProdutos { get; set; }
     }
 }

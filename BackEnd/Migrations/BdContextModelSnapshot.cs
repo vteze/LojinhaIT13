@@ -19,7 +19,43 @@ namespace LojinhaIT13.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DemoWsEF1.Models.Cliente", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.Carrinho", b =>
+                {
+                    b.Property<int>("CarrinhoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarrinhoId");
+
+                    b.HasIndex("ClienteId")
+                        .IsUnique();
+
+                    b.ToTable("Carrinhos");
+                });
+
+            modelBuilder.Entity("LojinhaIT13.Models.CarrinhoProduto", b =>
+                {
+                    b.Property<int>("CarrinhoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarrinhoId", "ProdutoId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("CarrinhoProduto");
+                });
+
+            modelBuilder.Entity("LojinhaIT13.Models.Cliente", b =>
                 {
                     b.Property<int>("ClienteId")
                         .ValueGeneratedOnAdd()
@@ -39,7 +75,7 @@ namespace LojinhaIT13.Migrations
                     b.ToTable("Clientes");
                 });
 
-            modelBuilder.Entity("DemoWsEF1.Models.Pedido", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.Pedido", b =>
                 {
                     b.Property<int>("PedidoId")
                         .ValueGeneratedOnAdd()
@@ -59,7 +95,7 @@ namespace LojinhaIT13.Migrations
                     b.ToTable("Pedidos");
                 });
 
-            modelBuilder.Entity("DemoWsEF1.Models.PedidoProduto", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.PedidoProduto", b =>
                 {
                     b.Property<int>("PedidoId")
                         .HasColumnType("int");
@@ -80,7 +116,7 @@ namespace LojinhaIT13.Migrations
                     b.ToTable("PedidoProduto");
                 });
 
-            modelBuilder.Entity("DemoWsEF1.Models.Produto", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.Produto", b =>
                 {
                     b.Property<int>("ProdutoId")
                         .ValueGeneratedOnAdd()
@@ -98,9 +134,39 @@ namespace LojinhaIT13.Migrations
                     b.ToTable("Produtos");
                 });
 
-            modelBuilder.Entity("DemoWsEF1.Models.Pedido", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.Carrinho", b =>
                 {
-                    b.HasOne("DemoWsEF1.Models.Cliente", "Cliente")
+                    b.HasOne("LojinhaIT13.Models.Cliente", "Cliente")
+                        .WithOne("Carrinho")
+                        .HasForeignKey("LojinhaIT13.Models.Carrinho", "ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("LojinhaIT13.Models.CarrinhoProduto", b =>
+                {
+                    b.HasOne("LojinhaIT13.Models.Carrinho", "Carrinho")
+                        .WithMany("CarrinhoProdutos")
+                        .HasForeignKey("CarrinhoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LojinhaIT13.Models.Produto", "Produto")
+                        .WithMany("CarrinhoProdutos")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Carrinho");
+
+                    b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("LojinhaIT13.Models.Pedido", b =>
+                {
+                    b.HasOne("LojinhaIT13.Models.Cliente", "Cliente")
                         .WithMany("Pedidos")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -109,15 +175,15 @@ namespace LojinhaIT13.Migrations
                     b.Navigation("Cliente");
                 });
 
-            modelBuilder.Entity("DemoWsEF1.Models.PedidoProduto", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.PedidoProduto", b =>
                 {
-                    b.HasOne("DemoWsEF1.Models.Pedido", "Pedido")
+                    b.HasOne("LojinhaIT13.Models.Pedido", "Pedido")
                         .WithMany("PedidoProdutos")
                         .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DemoWsEF1.Models.Produto", "Produto")
+                    b.HasOne("LojinhaIT13.Models.Produto", "Produto")
                         .WithMany("PedidoProdutos")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -128,18 +194,27 @@ namespace LojinhaIT13.Migrations
                     b.Navigation("Produto");
                 });
 
-            modelBuilder.Entity("DemoWsEF1.Models.Cliente", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.Carrinho", b =>
                 {
+                    b.Navigation("CarrinhoProdutos");
+                });
+
+            modelBuilder.Entity("LojinhaIT13.Models.Cliente", b =>
+                {
+                    b.Navigation("Carrinho");
+
                     b.Navigation("Pedidos");
                 });
 
-            modelBuilder.Entity("DemoWsEF1.Models.Pedido", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.Pedido", b =>
                 {
                     b.Navigation("PedidoProdutos");
                 });
 
-            modelBuilder.Entity("DemoWsEF1.Models.Produto", b =>
+            modelBuilder.Entity("LojinhaIT13.Models.Produto", b =>
                 {
+                    b.Navigation("CarrinhoProdutos");
+
                     b.Navigation("PedidoProdutos");
                 });
 #pragma warning restore 612, 618

@@ -7,6 +7,7 @@ namespace LojinhaIT13.Models
         public DbSet<Cliente> Clientes { get; set ;}
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<Produto> Produtos { get; set; }
+        public DbSet<Carrinho> Carrinhos { get; set; }
         public BdContext()
         {   
         }
@@ -34,6 +35,21 @@ namespace LojinhaIT13.Models
                             juncao => 
                             {
                                 juncao.HasKey(p => new { p.PedidoId, p.ProdutoId });
+                            }
+                        );
+            modelBuilder.Entity<Carrinho>()
+                        .HasMany(c => c.Produtos)
+                        .WithMany(c => c.Carrinhos)
+                        .UsingEntity<CarrinhoProduto>(
+                            juncao => juncao.HasOne(cp => cp.Produto)
+                                    .WithMany(p => p.CarrinhoProdutos)
+                                    .HasForeignKey(cp => cp.ProdutoId),
+                            juncao => juncao .HasOne(cp => cp.Carrinho)
+                                    .WithMany(c => c.CarrinhoProdutos)
+                                    .HasForeignKey(cp => cp.CarrinhoId),
+                            juncao => 
+                            {
+                                juncao.HasKey(cp => new { cp.CarrinhoId, cp.ProdutoId });
                             }
                         );
         }

@@ -35,7 +35,7 @@ namespace LojinhaIT13.Models
                             {
                                 juncao.HasKey(p => new { p.PedidoId, p.ProdutoId });
                             }
-                            );
+                        );
         }
     }
 }

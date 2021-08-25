@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using LojinhaIT13.Models;
 using LojinhaIT13.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace LojinhaIT13.Controllers
 {
@@ -30,15 +31,28 @@ namespace LojinhaIT13.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ProdutoDTO> BuscarProdutoId(int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<ProdutoDTO>> BuscarProdutoPorId(int id)
         {
-            _logger.LogInformation($"Consulta Produto: {id}");
-            var dados = _basedados.Produtos.Where(p => p.ProdutoId == id).Select(ProdutoDTO.FromProduto).FirstOrDefault();
-            if(dados != null)
+            try 
             {
-                return dados;
+                var produto = await _basedados.Produtos
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync<Produto>(p => p.ProdutoId == id);
+                if (produto == null)
+                {
+                    return NotFound();
+                }
+                return ProdutoDTO.FromProduto(produto);
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Falha na consulta do produto com id {id}");
+                throw;
+            }
         }
     }
 }

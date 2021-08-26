@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using LojinhaIT13.Models;
+using Microsoft.EntityFrameworkCore;
 using LojinhaIT13.Dtos;
 using System.Collections.Concurrent;
 using LojinhaIT13.Service;
@@ -17,40 +18,65 @@ namespace LojinhaIT13.Controllers
     {
         private readonly ILogger<CarrinhoController> _logger;
         private readonly BdContext _basedados;
-        private readonly CarrinhoService _carrinho;
 
-        public CarrinhoController(ILogger<CarrinhoController> logger, BdContext basedados, CarrinhoService carrinho)
+        public CarrinhoController(ILogger<CarrinhoController> logger, BdContext basedados)
         {
             _logger = logger;
             _basedados = basedados;
-            _carrinho = carrinho;
         }
 
-        [HttpPost("{idCliente}/{idProduto}")]
-        public ActionResult<ProdutoDTO> adicionaProduto(int idCliente, int idProduto)
-        {   
-            _logger.LogInformation($"Consulta Produto: {idProduto}");
-            var produto = _basedados.Produtos.Where(p => p.ProdutoId == idProduto ).Select(ProdutoDTO.FromProduto).FirstOrDefault();
-            var cliente = _basedados.Clientes.Find(idCliente);
-            if (cliente == null || produto == null)
+
+        [HttpPost("{​​idCliente}​​")]
+        public ActionResult<CarrinhoDTO> adicionaProduto(int idCliente, int idProduto, int quantidade)
+        {
+            _logger.LogInformation($"Adiciona Produto: {idProduto}");
+
+            if (quantidade <= 0)
             {
-                return NotFound();
+                return BadRequest("Quantidade inválida");
             }
-            return null; // SÓ PARA NAO DAR ERRO
-            // if (_carrinho.TryAdd(cliente, new List<ProdutoDTO>{produto}))
-            // {
-            //     return Ok("tudo certo");
-            // }
-            // else
-            // {
-            //     _carrinho[cliente] = _carrinho[cliente].Append(produto);
-            //     return Ok();
-            // }
-            
+            else
+            {
+                var cliente = _basedados.Clientes.Find(idCliente);            //Include(c => c.Carrinho).FirstOrDefaultAsync();
+                if (cliente == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var produto = _basedados.Produtos.Find(idProduto);
+                    if (produto == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        var carrinho = cliente.Carrinho;             //_basedados.Carrinhos.SingleOrDefault(c => c.ClienteId == cliente.ClienteId);
+                        if (carrinho == null)
+                        {
+                            carrinho = new Carrinho();
+                        }
+                        else
+                        {
+                            if (carrinho.Produtos.Contains(produto))
+                            {
+                                carrinho.CarrinhoProdutos.Single(cp => cp.ProdutoId == produto.ProdutoId).Quantidade += quantidade;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
+
+
+
+
+        //[]
 
         [HttpGet("{idCliente}")]
-        public ActionResult<IEnumerable<ProdutoDTO>> ConsultaCarrinho(int idCliente) 
+        public ActionResult<IEnumerable<ProdutoDTO>> ConsultaCarrinho(int idCliente)
         {
             var cliente = _basedados.Clientes.Find(idCliente);
             if (cliente == null)
@@ -58,11 +84,11 @@ namespace LojinhaIT13.Controllers
                 return NotFound();
             }
             return null; // SÓ PARA NAO DAR ERRO
-            // if (!_carrinho.ContainsKey(cliente))
-            // {
-            //     return BadRequest();
-            // }
-            // return _carrinho[cliente].ToList();
+                         // if (!_carrinho.ContainsKey(cliente))
+                         // {
+                         //     return BadRequest();
+                         // }
+                         // return _carrinho[cliente].ToList();
         }
     }
 }

@@ -5,7 +5,15 @@
 import 'package:flutter/material.dart';
 
 class GridListDemo extends StatelessWidget {
-  const GridListDemo({Key? key}) : super(key: key);
+  const GridListDemo({Key? key, /* required type*/}) : super(key: key);
+
+  // Se forem usar o widget gridView, podem retirar tudo que está relacionado a type e tileStyle.
+  // Essas duas variaveis seriam usadas para escolher 1 entre 3 estilos para as imagens do gridView
+  // Porém esse app acredito que vamos usar apenas 1 estilo(caso usam o gridView). o widget comentado
+  // no final do código que carrega a lógica de escolher o tileStyle.
+
+  // Os widgets estão stateless, mas devem virar stateful caso precisem carregar os produtos do banco de dados
+
 
   // final GridListDemoType type;
 
@@ -73,7 +81,7 @@ class GridListDemo extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text("Lojinha"),
       ),
-      // WARNING: Talvez tha de pudar o contrutor do gridView
+      // WARNING: Talvez tenha que mudar o contrutor do gridView no futuro
       body: GridView.count(
         restorationId: 'grid_view_demo_grid_offset',
         crossAxisCount: 2,
@@ -104,8 +112,8 @@ class _Photo {
   final String subtitle;
 }
 
-// Permite que o texto dentro das imagens se alinhe de maneira correta de acordo
-// com o espaço. Não funciona com o tipo imageOnly na declaração do tipo do widget
+// Permite que o header/footer dentro das imagens se alinhe de acordo
+// com o espaço relativo da imagem. Só é chamado nos tipos header e footer.
 class _GridTitleText extends StatelessWidget {
   const _GridTitleText(this.text);
 
@@ -121,7 +129,7 @@ class _GridTitleText extends StatelessWidget {
   }
 }
 
-// Constrói as imagens
+// Constrói as imagens do gridView
 class _GridDemoPhotoItem extends StatelessWidget {
   const _GridDemoPhotoItem({
     Key? key,
@@ -145,8 +153,8 @@ class _GridDemoPhotoItem extends StatelessWidget {
     print(photo.assetName);
     return image;
 
-    // O código abaixo seria para escolher o tipo da imagem na declaração do widget
-    // grid_list_viwe, tendo os tipos: iageOnly, header, footer.
+    // O código abaixo seria para verificar o tipo da estilização da imagem do widget
+    // grid_list_view, sendo os tipos: imageOnly, header, footer.
 
     // switch (tileStyle) {
       // case GridListDemoType.imageOnly:

@@ -5,7 +5,10 @@
 import 'package:flutter/material.dart';
 
 class GridListDemo extends StatelessWidget {
-  const GridListDemo({Key? key, /* required type*/}) : super(key: key);
+  const GridListDemo({
+    Key? key,
+    /* required type*/
+  }) : super(key: key);
 
   // Se forem usar o widget gridView, podem retirar tudo que está relacionado a type e tileStyle.
   // Essas duas variaveis seriam usadas para escolher 1 entre 3 estilos para as imagens do gridView
@@ -13,7 +16,6 @@ class GridListDemo extends StatelessWidget {
   // no final do código que carrega a lógica de escolher o tileStyle.
 
   // Os widgets estão stateless, mas devem virar stateful caso precisem carregar os produtos do banco de dados
-
 
   // final GridListDemoType type;
 
@@ -26,47 +28,56 @@ class GridListDemo extends StatelessWidget {
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
       _Photo(
-        assetName: 'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
+        assetName:
+            'https://www.eusemfronteiras.com.br/wp-content/uploads/2018/09/42159296_s-810x538.jpg',
         title: "teste title",
         subtitle: "teste subtitle",
       ),
@@ -87,12 +98,12 @@ class GridListDemo extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(15),
         childAspectRatio: 1,
         children: _photos(context).map<Widget>((photo) {
           return _GridDemoPhotoItem(
             photo: photo,
-            // tileStyle: type,
+            //tileStyle: type,
           );
         }).toList(),
       ),
@@ -140,57 +151,44 @@ class _GridDemoPhotoItem extends StatelessWidget {
   final _Photo photo;
   // final GridListDemoType tileStyle;
 
+  // dica 1 - usar Ctrl + . este comando "envolve" um conjunto de código por um widget
+
+  // Inserimos nome do produto e valor
+  // Inserimos botão para adicionar ao carrinho
+  // Ajustamos o container e espaçamentos
+  // TO-DO: resolver o overflow que está acontecendo com o texto e botão
+  // TO-DO: Ajustar a cor e bordas do container
+
   @override
   Widget build(BuildContext context) {
-    final Widget image = Material(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-      clipBehavior: Clip.antiAlias,
-      child: Image.asset(
-        "images/teste.jpg",
-        fit: BoxFit.cover,
-      ),
-    );
-    print(photo.assetName);
-    return image;
-
-    // O código abaixo seria para verificar o tipo da estilização da imagem do widget
-    // grid_list_view, sendo os tipos: imageOnly, header, footer.
-
-    // switch (tileStyle) {
-      // case GridListDemoType.imageOnly:
-        // return image;
-      // case GridListDemoType.header:
-      //   return GridTile(
-      //     header: Material(
-      //       color: Colors.transparent,
-      //       shape: const RoundedRectangleBorder(
-      //         borderRadius: BorderRadius.vertical(top: Radius.circular(4)),
-      //       ),
-      //       clipBehavior: Clip.antiAlias,
-      //       child: GridTileBar(
-      //         title: _GridTitleText(photo.title),
-      //         backgroundColor: Colors.black45,
-      //       ),
-      //     ),
-      //     child: image,
-      //   );
-      // case GridListDemoType.footer:
-      //   return GridTile(
-      //     footer: Material(
-      //       color: Colors.transparent,
-      //       shape: const RoundedRectangleBorder(
-      //         borderRadius: BorderRadius.vertical(bottom: Radius.circular(4)),
-      //       ),
-      //       clipBehavior: Clip.antiAlias,
-      //       child: GridTileBar(
-      //         backgroundColor: Colors.black45,
-      //         title: _GridTitleText(photo.title),
-      //         subtitle: _GridTitleText(photo.subtitle),
-      //       ),
-      //     ),
-      //     child: image,
-      //   );
-    // return null;
+    final Widget tile = Material(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+          margin: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Image.asset("images/teste.jpg", fit: BoxFit.cover),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Nome do produto"),
+                      Text("Valor"),
+                    ],
+                  ),
+                  ElevatedButton(
+                    onPressed: null,
+                    child: Icon(Icons.shopping_cart),
+                  )
+                ],
+              )
+            ],
+          ),
+        ));
+    //print(photo.assetName);
+    return tile;
   }
 }
-

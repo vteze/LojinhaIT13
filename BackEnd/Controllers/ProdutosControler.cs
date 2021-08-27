@@ -23,10 +23,17 @@ namespace LojinhaIT13.Controllers
             _basedados = basedados;
         }
 
-        //GET /produtos
+        //GET /produtos?pesquisa=[pesquisa]
         [HttpGet]
-        public IEnumerable<ProdutoDTO> BuscarTodosProdutos()
+        public IEnumerable<ProdutoDTO> BuscarTodosProdutos([FromQuery] string pesquisa)
         {
+            if (pesquisa != null)
+            {
+                return _basedados.Produtos
+                    .Select(ProdutoDTO.FromProduto)
+                    .Where(produto => produto.Nome.Contains(pesquisa.ToLower()));    
+            }
+
             return _basedados.Produtos.Select(ProdutoDTO.FromProduto);
         }
 

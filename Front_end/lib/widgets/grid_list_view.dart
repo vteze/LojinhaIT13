@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:front_end/models/photo.dart';
 import 'package:front_end/widgets/product_card.dart';
 import 'package:front_end/utils/array.dart' as photos;
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'search_app_bar.dart';
 
 class GridListDemo extends StatelessWidget {
   const GridListDemo({
@@ -28,42 +30,7 @@ class GridListDemo extends StatelessWidget {
       // Construção da barra de pesquisa com o FloatingSearchBar ( Olhar exemplo https://stackoverflow.com/questions/57740955/how-to-make-a-floating-search-bar-on-top-of-google-maps-in-flutter)
       // Completar a implementação
       // // Executar pub get para pegar a dependência do FloatingSearchBar importada (descrita no .yaml)
-      // appBar: FloatingSearchBar(
-      //   trailing: CircleAvatar(
-      //     child: Text("RD"),
-      //   ),
-      //   drawer: Drawer(
-      //     child: Container(),
-      //   ),
-      //   onChanged: (String value) {},
-      //   onTap: () {},
-      //   decoration: InputDecoration.collapsed(
-      //     hintText: "Search...",
-      //   ),
-      //   children: [],
-      // ),
-
-      // Parte anterior sem o FloatingSearchBar ( Possível não utilização )
-      //
-      // appBar: AppBar(
-
-      //   backgroundColor: Colors.green,
-      //   automaticallyImplyLeading: false,
-      //   title: Container(
-      //     child: TextFormField(
-      //       onChanged: (value) => null,
-      //       style: TextStyle(
-      //         color: Colors.black,
-      //       ),
-      //     ),
-      //   ),
-      //   actions: [
-      //     FloatingActionButton(
-      //       onPressed: () => null,
-      //       child: Icon(Icons.shopping_cart),
-      //     ),
-      //   ],
-      // ),
+      appBar: FloatAppBar(),
       // WARNING: Talvez tenha que mudar o contrutor do gridView no futuro
       body: GridView.count(
         restorationId: 'grid_view_demo_grid_offset',

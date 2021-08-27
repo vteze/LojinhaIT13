@@ -4,5 +4,3 @@ import 'package:front_end/pages/home.dart';
 void main() {
   runApp(MyApp());
 }
-
-

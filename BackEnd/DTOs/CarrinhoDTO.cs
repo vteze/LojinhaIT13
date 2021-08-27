@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using LojinhaIT13.Models;
 
 namespace LojinhaIT13.Dtos
 {
@@ -13,6 +15,21 @@ namespace LojinhaIT13.Dtos
         [EmailAddress]
         public string EmailCliente { get; set; }
         public IEnumerable<CarrinhoItemDTO> Itens { get; set; }
+
+        public static CarrinhoDTO FromCarrinho(Carrinho carrinho)
+        {
+            return new CarrinhoDTO
+            {
+                IdCliente = carrinho.CarrinhoId,
+                NomeCliente = carrinho.Cliente.Nome,
+                EmailCliente = carrinho.Cliente.Email,
+                Itens = carrinho.CarrinhoProdutos.Select(pp => new CarrinhoItemDTO
+                {
+                    CodigoProduto = pp.ProdutoId,
+                    Quantidade = pp.Quantidade
+                })
+            };
+        }
     }
 
     public class CarrinhoItemDTO
@@ -20,7 +37,6 @@ namespace LojinhaIT13.Dtos
         [Required]
         public int CodigoProduto { get; set; }
         [Required]
-        [Range(1, 10)]
         public int Quantidade { get; set; }
     }
 }

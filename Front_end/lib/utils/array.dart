@@ -1,7 +1,7 @@
 import 'package:front_end/models/photo.dart';
 
 // array estático para ajudar a carregar imagens
-var list = [
+List<Photo> list = [
       Photo(
         assetName: 'images/1.jpg',
         title: "teste title",

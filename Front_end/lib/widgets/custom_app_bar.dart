@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/pages/shopping_basket_page.dart';
+import 'package:front_end/widgets/search_app_bar.dart';
 
 typedef SearchCallback = Function(String);
 
@@ -8,8 +9,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final SearchCallback onTextChanged;
   final GlobalKey<ScaffoldState> scaffoldKey;
   CustomAppBar(this.onTextChanged, this.scaffoldKey);
-
-  var primaryColor = const Color(0xFF151026);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
-                        Icons.shopping_basket,
+                        Icons.shopping_cart,
                         color: Colors.white,
                       ),
                     ),
@@ -56,22 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: 50,
               margin: EdgeInsets.only(
                   left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
-              child: TextField(
-                onChanged: (text) => onTextChanged(text),
-                decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.only(right: 8.0, left: 12.0),
-                    child: Icon(Icons.search),
-                  ),
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: "What are you looking for?",
-                  contentPadding: EdgeInsets.all(10.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                      borderSide: BorderSide(width: 10.0, color: Colors.white)),
-                ),
-              ),
+              child: FloatAppBar() // inserção da floatingAppBar dentro do customAppBar
             )
           ],
         ),

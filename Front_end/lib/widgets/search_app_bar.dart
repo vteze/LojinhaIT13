@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class FloatAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
-    return (FloatingSearchBar(
+    return FloatingSearchBar(
+      margins: EdgeInsets.all(0), // Retirado os paddings externos do campo de busca
       builder: (context, transition) {
         return ClipRRect(
           borderRadius: BorderRadius.circular(8),
@@ -20,7 +21,7 @@ class FloatAppBar extends StatelessWidget with PreferredSizeWidget {
           ),
         );
       },
-    ));
+    );
   }
 
   @override

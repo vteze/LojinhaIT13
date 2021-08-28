@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/models/photo.dart';
+import 'package:front_end/pages/product_detail.dart';
 
 // Constrói as imagens do gridView e aplica borderRadius nas mesmas
 class GridDemoPhotoItem extends StatelessWidget {
@@ -45,7 +46,17 @@ class GridDemoPhotoItem extends StatelessWidget {
           ),
           )
         ),
-        child: image,
+        child: InkResponse(
+          enableFeedback: true,
+          onTap: () {
+            // Push para a área de detalhe do produto
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProductDetail(photo))
+            );
+          },
+          child: image
+        ),
       ),
     );
   }

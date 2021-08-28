@@ -13,10 +13,10 @@ class GridListDemo extends StatelessWidget {
   }) : super(key: key);
 
   // Os widgets estão stateless, mas devem virar stateful caso precisem carregar os produtos do banco de dados
-
   // final GridListDemoType type;
 
   // Array estático de imagens apenas para teste visual
+
   List<Photo> _photos(BuildContext context) {
     return photos.list;
   }
@@ -25,10 +25,6 @@ class GridListDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("Lojinha"),
-      ),
       // WARNING: Talvez tenha que mudar o contrutor do gridView no futuro
       body: GridView.count(
         restorationId: 'grid_view_demo_grid_offset',

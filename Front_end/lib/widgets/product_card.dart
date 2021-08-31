@@ -3,8 +3,8 @@ import 'package:front_end/models/photo.dart';
 import 'package:front_end/pages/product_detail.dart';
 
 // Constrói as imagens do gridView e aplica borderRadius nas mesmas
-class GridDemoPhotoItem extends StatelessWidget {
-  const GridDemoPhotoItem({
+class ProductCard extends StatelessWidget {
+  const ProductCard({
     Key? key,
     required this.photo,
   }) : super(key: key);

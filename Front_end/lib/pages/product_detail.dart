@@ -15,7 +15,7 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        color: Color(0xf5f5f5),
         child: Column(
           // Lista de elementos que irão cobrir a tela em dereção de coluna.
           // O layout foi dividido em 3 áreas principais: Imagem, Área de texto, Botão.
@@ -38,7 +38,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     padding: EdgeInsets.only(top: 40.0),
                     child: IconButton(
                       icon: Icon(
-                        Icons.keyboard_arrow_left,
+                        Icons.arrow_back,
                         color: Colors.cyan,
                         size: 40.0
                       ),
@@ -93,7 +93,7 @@ class _ProductDetailState extends State<ProductDetail> {
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text("${widget.photo.title} has been added to your basket"),
+                    content: Text("${widget.photo.title} has been added to your shopping kart"),
                     duration: Duration(milliseconds: 1000), 
                   ),
                 );

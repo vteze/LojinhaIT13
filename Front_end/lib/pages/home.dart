@@ -14,8 +14,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.cyan,
       ),
       home: Scaffold(
+        backgroundColor: Color(0xf5f5f5),
         appBar: CustomAppBar((text) => "", scaffoldKey),
-        body: GridListDemo(),
+        body: GridListView(),
       ),
       debugShowCheckedModeBanner: false,
     );

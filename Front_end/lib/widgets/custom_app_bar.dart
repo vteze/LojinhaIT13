@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/pages/shopping_basket_page.dart';
+import 'package:front_end/pages/shopping_kart.dart';
 import 'package:front_end/widgets/search_app_bar.dart';
 
 typedef SearchCallback = Function(String);
@@ -39,7 +39,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   InkWell(
                     borderRadius: BorderRadius.circular(48.0),
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ShoppingBasketPage())),
+                        builder: (context) => ShoppingKart())),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(

@@ -7,8 +7,8 @@ import 'package:front_end/models/photo.dart';
 import 'package:front_end/widgets/product_card.dart';
 import 'package:front_end/utils/array.dart' as photos;
 
-class GridListDemo extends StatelessWidget {
-  const GridListDemo({
+class GridListView extends StatelessWidget {
+  const GridListView({
     Key? key,
   }) : super(key: key);
 
@@ -34,7 +34,7 @@ class GridListDemo extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         childAspectRatio: 1,
         children: _photos(context).map<Widget>((photo) {
-          return GridDemoPhotoItem(
+          return ProductCard(
             photo: photo,
           );
         }).toList(),

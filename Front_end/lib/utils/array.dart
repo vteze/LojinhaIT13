@@ -52,4 +52,9 @@ List<Photo> list = [
         title: "teste title",
         subtitle: "teste subtitle",
       ),
+      Photo(
+        assetName: 'images/lays.png',
+        title: "teste title",
+        subtitle: "teste subtitle",
+      ),
     ];

@@ -25,10 +25,23 @@ namespace LojinhaIT13.Controllers
 
         //POST /pedidos
         [HttpPost]
-        public async Task<ActionResult<PedidoDTO>> ProcessarCarrinho(CarrinhoDTO carrinho)
-        {
-            var pedido = new Pedido();
+        public async Task<ActionResult<PedidoDTO>> FecharPedido(int pedidoID)
+        {         
+            var pedido = await _basedados.Pedidos
+                .Include(p => p.DataEmissao)
+                .Include ()
+            if(pedido == null)
+            {
+                return BadRequest("Pedido inexistente");
+            }
+            if(pedido.DataEmissao != null)
+            {
+                return BadRequest("Pedido já finalizado");
+            }
             pedido.DataEmissao = DateTime.Now;
+
+
+            /*
             var cliente = await _basedados.Clientes.FindAsync(carrinho.IdCliente);
             if (cliente == null)
             {
@@ -60,7 +73,7 @@ namespace LojinhaIT13.Controllers
             }
             await _basedados.Pedidos.AddAsync(pedido);
             await _basedados.SaveChangesAsync();
-            return PedidoDTO.FromPedido(pedido);
+            return PedidoDTO.FromPedido(pedido);*/
         }
     }
 }

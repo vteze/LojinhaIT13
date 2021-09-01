@@ -8,6 +8,5 @@ namespace LojinhaIT13.Models
         public string Nome { get; set; }
         public string Email { get; set; }
         public List<Pedido> Pedidos { get; set; }
-        public Carrinho Carrinho { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace LojinhaIT13.Models
         public Cliente Cliente { get; set; }
         public ICollection<Produto> Produtos { get; set; }
         public List<PedidoProduto> PedidoProdutos { get; set; }
+
+        public bool Fechado() => DataEmissao == null ? false : true
     }
 }

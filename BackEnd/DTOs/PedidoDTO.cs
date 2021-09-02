@@ -8,7 +8,7 @@ namespace LojinhaIT13.Dtos
     public class PedidoDTO
     {
         public int Codigo { get; set; }
-        public DateTime DataEmissao { get; set; }
+        public DateTime? DataEmissao { get; set; }
         public string NomeCliente { get; set; }
         public string EmailCliente { get; set; }        
         public decimal ValorTotal { get; set; }
@@ -45,7 +45,7 @@ namespace LojinhaIT13.Dtos
                 CodigoProduto = pedidoProduto.ProdutoId, 
                 NomeProduto = pedidoProduto.Produto.Nome, 
                 Quantidade = pedidoProduto.Quantidade, 
-                PrecoUnitario = pedidoProduto.Produto.PrecoUnitario, 
+                PrecoUnitario = pedidoProduto.Produto.Preco, 
                 UrlImagem = pedidoProduto.Produto.UrlImagem, 
                 Descricao = pedidoProduto.Produto.Descricao,
             };

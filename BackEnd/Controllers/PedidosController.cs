@@ -13,26 +13,30 @@ namespace LojinhaIT13.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("AllowAll")]
     public class PedidosController : ControllerBase
     {
         private readonly ILogger<ProdutosController> _logger;
         private readonly BdContext _basedados;
 
-        public PedidosController(ILogger<ProdutosController> logger, BdContext basedados)
-        {
+        public PedidosController(ILogger<ProdutosController> logger, BdContext basedados) {
             _logger = logger;
             _basedados = basedados;
         }
 
-        //POST /pedidos
+        //POST /pedidos/fecha/{:pedidoId}
         [HttpPost]
-        public ActionResult<PedidoDTO> FecharPedido(int pedidoID)
-        {         
+        [Route("fecha/{pedidoId}")]
+        public ActionResult<PedidoDTO> FechaPedido(int pedidoId)
+        {    
+            /*  VERIFICAR SE O FechaPedido RETORNA UM PEDIDO NOVO OU NÃO RETORNA NADA */
+            
+            // Buscar pedido retornando os produtos associados (eager loading)
             var pedido = _basedados.Pedidos
                 .Include(p => p.DataEmissao)
                 .Include(p => p.PedidoProdutos)
                 .ThenInclude(pp => pp.Produto)
-                .FirstOrDefault(p => p.PedidoId == pedidoID);
+                .FirstOrDefault(p => p.PedidoId == pedidoId);
 
             if(pedido == null)
             {
@@ -60,31 +64,55 @@ namespace LojinhaIT13.Controllers
             _basedados.SaveChanges();
             
             return retorno;
-            
-            /* REUTILIZAR FLUXO DE INSERIR PedidoProduto */
+        }
 
-            // pedido.PedidoProdutos = new List<PedidoProduto>();
-            // foreach (var item in carrinho.Itens)
-            // {
-            //     var produto = await _basedados.Produtos.FindAsync(item.CodigoProduto);
-            //     if (produto == null)
-            //     {
-            //         return BadRequest($"Produto não encontrado {item.CodigoProduto}");
-            //     }
-            //     pedido.PedidoProdutos.Add(new PedidoProduto 
-            //         {
-            //             // Pedido = pedido,
-            //             // PedidoId = pedido.PedidoId,
-            //             Produto = produto,
-            //             // ProdutoId = produto.ProdutoId,
-            //             Quantidade = item.Quantidade,
-            //             ValorUnitario = produto.Preco
-            //         });
-            //     // pedido.Produtos.Add(produto);
-            // }
-            // await _basedados.Pedidos.AddAsync(pedido);
-            // await _basedados.SaveChangesAsync();
-            // return PedidoDTO.FromPedido(pedido);
+        //POST /pedidos/adiciona/{:pedidoId}?produtoId={produtoId}
+        [HttpPost]
+        [Route("adiciona/{pedidoId}")]
+        public async Task<ActionResult<PedidoDTO>> AdicionaProduto(
+            int pedidoId, 
+            [FromQuery] int produtoId
+        ) {    
+            // Buscar pedido retornando os produtos associados (eager loading)
+            var pedido = _basedados.Pedidos
+                .Include(p => p.DataEmissao)
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
+                .FirstOrDefault(p => p.PedidoId == pedidoId);
+
+            if(pedido == null)
+            {
+                return BadRequest("Pedido inexistente");
+            }
+
+            if(pedido.DataEmissao != null)
+            {
+                return BadRequest("Pedido já finalizado");
+            }
+
+            if (pedido.PedidoProdutos.Find(pp => pp.ProdutoId == produtoId) != null)
+            {
+                return BadRequest("Produto já inserido");
+            }
+
+            var produto = await _basedados.Produtos.FindAsync(produtoId);
+
+            if(produto == null)
+            {
+                return BadRequest("Produto inexistente");
+            }
+
+            // Adicionar produto no pedido
+            pedido.PedidoProdutos.Add(new PedidoProduto{
+                Produto = produto,
+                Pedido = pedido,
+                Quantidade = 1,
+                ValorUnitario = produto.Preco,
+            });
+
+            await _basedados.SaveChangesAsync();
+
+            return PedidoDTO.FromPedido(pedido);
         }
     }
 }

@@ -6,6 +6,8 @@ namespace LojinhaIT13.Dtos
     {
         public int Codigo { get; set; }
         public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public string UrlImagem { get; set; }
         public decimal PrecoUnitario { get; set; }
         public static ProdutoDTO FromProduto (Produto produto)
         {
@@ -13,7 +15,9 @@ namespace LojinhaIT13.Dtos
             { 
                 Codigo = produto.ProdutoId, 
                 Nome = produto.Nome, 
-                PrecoUnitario = produto.Preco
+                PrecoUnitario = produto.Preco,
+                Descricao = produto.Descricao,
+                UrlImagem = produto.UrlImagem,
             };
         }
     }

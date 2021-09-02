@@ -10,13 +10,13 @@ namespace LojinhaIT13.Dtos
         public int Codigo { get; set; }
         public DateTime DataEmissao { get; set; }
         public string NomeCliente { get; set; }
-        public string EmailCliente { get; set; }
-        public IEnumerable<PedidoItemDTO> Itens { get; set; }
+        public string EmailCliente { get; set; }        
         public decimal ValorTotal { get; set; }
+        public IEnumerable<PedidoItemDTO> Itens { get; set; }
+
 
         public static PedidoDTO FromPedido(Pedido pedido)
         {
-            // var itens = pedido.PedidoProdutos.Select(pp => new PedidoItemDTO { CodigoProduto = pp.ProdutoId, NomeProduto = pp.Produto.Nome, Quantidade = pp.Quantidade } );
             return new PedidoDTO
             {
                 Codigo = pedido.PedidoId,
@@ -34,6 +34,9 @@ namespace LojinhaIT13.Dtos
         public int CodigoProduto { get; set; }
         public string NomeProduto {get; set;}
         public int Quantidade { get; set; }
+        public decimal PrecoUnitario { get; set; }
+        public string UrlImagem { get; set; }
+        public string Descricao { get; set; }
 
         public static PedidoItemDTO FromPedido(PedidoProduto pedidoProduto)
         {
@@ -41,7 +44,10 @@ namespace LojinhaIT13.Dtos
             { 
                 CodigoProduto = pedidoProduto.ProdutoId, 
                 NomeProduto = pedidoProduto.Produto.Nome, 
-                Quantidade = pedidoProduto.Quantidade 
+                Quantidade = pedidoProduto.Quantidade, 
+                PrecoUnitario = pedidoProduto.Produto.PrecoUnitario, 
+                UrlImagem = pedidoProduto.Produto.UrlImagem, 
+                Descricao = pedidoProduto.Produto.Descricao,
             };
         }
 

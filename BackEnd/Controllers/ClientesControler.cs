@@ -27,16 +27,23 @@ namespace LojinhaIT13.Controllers
 
         //GET /clientes
         [HttpGet]
-        public IEnumerable<ClienteDTO> BuscarTodosClientes([FromQuery] string pesquisa)
+        public ActionResult<IEnumerable<ClienteDTO>> BuscarTodosClientes([FromQuery] string pesquisa)
         {
             if (pesquisa != null)
             {
-                return _basedados.Clientes
+                var resultado = _basedados.Clientes
                     .Select(ClienteDTO.FromCliente)
                     .Where(cliente => cliente.Nome.Contains(pesquisa.ToLower()));    
+                if (resultado.Count() == 0)
+                {
+                    return BadRequest("Nenhum cliente encontrado.");
+                } 
+                else
+                {
+                    return resultado.ToList();
+                }
             }
-
-            return _basedados.Clientes.Select(ClienteDTO.FromCliente);
+            return _basedados.Clientes.Select(ClienteDTO.FromCliente).ToList();
         }
     }
 }

@@ -27,7 +27,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       padding: const EdgeInsets.only(left: 32.0),
                       child: Text(
                         "Lojinha",
-                        style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ),

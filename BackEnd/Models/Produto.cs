@@ -8,6 +8,7 @@ namespace LojinhaIT13.Models
         public string Nome { get; set; }
         public decimal Preco { get; set; }
         public string UrlImagem { get; set; }
+        public string Descricao { get; set;}
         public ICollection<Pedido> Pedidos { get; set; }
         public List<PedidoProduto> PedidoProdutos { get; set; }
     }

@@ -7,11 +7,13 @@ using Microsoft.Extensions.Logging;
 using LojinhaIT13.Models;
 using LojinhaIT13.Dtos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors;
 
 namespace LojinhaIT13.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("AllowAll")]
     public class ProdutosController : ControllerBase
     {
         private readonly ILogger<ProdutosController> _logger;

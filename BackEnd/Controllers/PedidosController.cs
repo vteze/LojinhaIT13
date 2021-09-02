@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using LojinhaIT13.Models;
 using LojinhaIT13.Dtos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors;
 
 namespace LojinhaIT13.Controllers
 {

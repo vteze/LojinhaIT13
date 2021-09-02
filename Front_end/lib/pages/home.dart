@@ -11,11 +11,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lojinha',
       theme: ThemeData(
-        primarySwatch: Colors.cyan,
+        primaryColor: Color(0xff170337),
+        primaryColorLight: Color(0xff821E64),
+        accentColor: Color(0xffDC2B50),
+        highlightColor: Color(0xffFA5A0A),
+        backgroundColor: Color(0xffF5F5F5) // Nao esta na paleta
       ),
       home: Scaffold(
-        backgroundColor: Color(0xf5f5f5),
-        appBar: CustomAppBar((text) => "", scaffoldKey),
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: CustomAppBar(),
         body: GridListView(),
       ),
       debugShowCheckedModeBanner: false,

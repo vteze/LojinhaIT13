@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/pages/shopping_kart.dart';
-import 'package:front_end/widgets/search_app_bar.dart';
+import 'package:front_end/pages/shopping_cart.dart';
 
 typedef SearchCallback = Function(String);
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final preferredSize = new Size.fromHeight(164.0);
-  final SearchCallback onTextChanged;
-  final GlobalKey<ScaffoldState> scaffoldKey;
-  CustomAppBar(this.onTextChanged, this.scaffoldKey);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       elevation: 6,
-      color: Theme.of(context).primaryColorDark,
+      color: Theme.of(context).primaryColor,
       child: Padding(
-        padding: const EdgeInsets.only(top: 28.0),
+        padding: const EdgeInsets.fromLTRB(0, 28, 0, 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -30,8 +26,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 32.0),
                       child: Text(
-                        "Discover",
-                        style: TextStyle(color: Colors.white, fontSize: 28),
+                        "Lojinha",
+                        style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -39,7 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   InkWell(
                     borderRadius: BorderRadius.circular(48.0),
                     onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ShoppingKart())),
+                        builder: (context) => ShoppingCart())),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(
@@ -51,12 +47,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ],
               ),
             ),
-            Container(
-              height: 50,
-              margin: EdgeInsets.only(
-                  left: 16.0, top: 8.0, right: 16.0, bottom: 8.0),
-              child: FloatAppBar() // inserção da floatingAppBar dentro do customAppBar
-            )
           ],
         ),
       ),

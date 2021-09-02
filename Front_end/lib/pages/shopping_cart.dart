@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 // TODO: implementar a lista de carrinho
-class ShoppingKart extends StatefulWidget {
-  ShoppingKart({Key? key}) : super(key: key);
+class ShoppingCart extends StatefulWidget {
+  ShoppingCart({Key? key}) : super(key: key);
 
   @override
-  _ShoppingKartState createState() => _ShoppingKartState();
+  _ShoppingCartState createState() => _ShoppingCartState();
 }
 
-class _ShoppingKartState extends State<ShoppingKart> {
+class _ShoppingCartState extends State<ShoppingCart> {
 
   @override
   Widget build(BuildContext context) {

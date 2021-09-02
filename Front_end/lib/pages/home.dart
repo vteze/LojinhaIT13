@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/widgets/grid_list_view.dart';
-import 'package:front_end/widgets/custom_app_bar.dart';
+/* import 'package:front_end/widgets/grid_list_view.dart';
+import 'package:front_end/widgets/custom_app_bar.dart'; */
+import 'package:front_end/pages/user_authentication.dart';
+
 
 class MyApp extends StatelessWidget {
 
@@ -18,9 +20,9 @@ class MyApp extends StatelessWidget {
         backgroundColor: Color(0xffF5F5F5) // Nao esta na paleta
       ),
       home: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: CustomAppBar(),
-        body: GridListView(),
+        body: const Center(
+          child: UserAuthentication(),
+        ),
       ),
       debugShowCheckedModeBanner: false,
     );

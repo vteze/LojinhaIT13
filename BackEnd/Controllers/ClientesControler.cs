@@ -9,6 +9,7 @@ using LojinhaIT13.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cors;
 
+
 namespace LojinhaIT13.Controllers
 {
     [ApiController]
@@ -33,11 +34,11 @@ namespace LojinhaIT13.Controllers
             {
                 var resultado = _basedados.Clientes
                     .Select(ClienteDTO.FromCliente)
-                    .Where(cliente => cliente.Nome.Contains(pesquisa.ToLower()));    
+                    .Where(cliente => cliente.Nome.Contains(pesquisa.ToLower()));
                 if (resultado.Count() == 0)
                 {
                     return BadRequest("Nenhum cliente encontrado.");
-                } 
+                }
                 else
                 {
                     return resultado.ToList();
@@ -45,5 +46,34 @@ namespace LojinhaIT13.Controllers
             }
             return _basedados.Clientes.Select(ClienteDTO.FromCliente).ToList();
         }
+
+        [HttpGet("{idCliente}")]
+        public ActionResult<PedidoDTO> BuscarCarrinhoCliente(int idCliente)
+        {
+            //busca cliente
+            var cliente = _basedados.Clientes.Find(idCliente);
+
+            if (cliente == null)
+            {
+                return NotFound("Cliente nao encontrado");
+            }
+            //busca pedido que não esta fechado
+            var pedido = _basedados.Pedidos
+           .Include(p => p.DataEmissao)
+           .Include(p => p.PedidoProdutos)
+           .ThenInclude(pp => pp.Produto)
+           .FirstOrDefault(p => p.ClienteId == idCliente && !p.Fechado());
+
+            
+            if (pedido == null)
+            {
+                pedido = new Pedido();
+            }
+
+
+            var retorno = PedidoDTO.FromPedido(pedido);  
+            return retorno;          
+        }
     }
+
 }

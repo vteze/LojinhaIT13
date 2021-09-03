@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/DTOs/Product.dart';
 
-
 // inputs: produto, idPedido
 // output: pedido
 // obj: inserir uma unidade do produto no pedido cujo id seja igual a idPedido, e receber ora um erro a ser tratado, ora um pedido.
 // TODO: ao terminar de implementar as funcionalidades de usuário, alterar parâmetros do método para que ele receba o id do pedido do usuário.
-Future<Product> adicionarAoPedido(Product product, int idPedido){
-
-  
-}
-
+/* Future<Product> adicionarAoPedido(Product product, int idPedido) {
+  return null;
+} */
 
 class ProductDetail extends StatefulWidget {
   ProductDetail(this.product, {Key? key}) : super(key: key);
@@ -65,7 +62,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                     style: TextStyle(fontSize: 20)),
                               ),
                               // Subtitle
-                              Text('R\$ '+widget.product.precoUnitario!,
+                              Text('R\$ ' + widget.product.precoUnitario!,
                                   style: TextStyle(
                                       color: Theme.of(context).highlightColor,
                                       fontSize: 18.0,

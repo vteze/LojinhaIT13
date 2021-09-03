@@ -51,29 +51,28 @@ namespace LojinhaIT13.Controllers
         public ActionResult<PedidoDTO> BuscarCarrinhoCliente(int idCliente)
         {
             //busca cliente
-            var cliente = _basedados.Clientes.Find(idCliente);
+            var cliente = _basedados.Clientes
+                .Include(c => c.Pedidos)
+                .ThenInclude(p => p.PedidoProdutos)
+                .FirstOrDefault(c => c.ClienteId == idCliente);
 
             if (cliente == null)
             {
                 return NotFound("Cliente nao encontrado");
             }
-            //busca pedido que não esta fechado
-            var pedido = _basedados.Pedidos
-           .Include(p => p.DataEmissao)
-           .Include(p => p.PedidoProdutos)
-           .ThenInclude(pp => pp.Produto)
-           .FirstOrDefault(p => p.ClienteId == idCliente && !p.Fechado());
 
-            
-            if (pedido == null)
+            //busca pedido que não esta fechado
+            var pedidoAberto = cliente.Pedidos.SingleOrDefault(p => p.DataEmissao == null);
+            if (pedidoAberto == null)
             {
-                pedido = new Pedido();
+                pedidoAberto = new Pedido();
+                pedidoAberto.Cliente = cliente;
+                pedidoAberto.PedidoProdutos = new List<PedidoProduto>();
+                _basedados.Pedidos.Add(pedidoAberto);
+                _basedados.SaveChanges();
             }
 
-
-            var retorno = PedidoDTO.FromPedido(pedido);  
-            return retorno;          
+            return PedidoDTO.FromPedido(pedidoAberto);          
         }
     }
-
 }

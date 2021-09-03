@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TODO: implementar a lista de carrinho
 class ShoppingCart extends StatefulWidget {
   ShoppingCart({Key? key}) : super(key: key);
 
@@ -17,7 +16,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
         title: Text(
           "Carrinho",
           style: TextStyle(
-              color: Colors.white, fontSize: 25, fontWeight: FontWeight.w600),
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       body: Text('Oie'),
@@ -47,15 +49,16 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 width: 120,
                 height: 40,
                 child: ElevatedButton(
-                    onPressed: null,
-                    child: Text(
-                      "Comprar",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).accentColor),
-                    )),
+                  onPressed: null,
+                  child: Text(
+                    "Comprar",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).accentColor),
+                  ),
+                ),
               ),
             ],
           ),

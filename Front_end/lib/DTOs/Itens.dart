@@ -2,7 +2,7 @@ class Itens {
   int? codigoProduto;
   String? nomeProduto;
   int? quantidade;
-  int? precoUnitario;
+  double? precoUnitario;
   String? urlImagem;
   String? descricao;
 

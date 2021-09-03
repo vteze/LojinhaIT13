@@ -5,7 +5,7 @@ class Pedido {
   String? dataEmissao;
   String? nomeCliente;
   String? emailCliente;
-  int? valorTotal;
+  double? valorTotal;
   List<Itens?>? itens;
 
   Pedido(
@@ -24,7 +24,7 @@ class Pedido {
     valorTotal = json['valorTotal'];
     if (json['itens'] != null) {
       // ignore: deprecated_member_use
-      itens = new List<Itens?>.filled(1, null);
+      itens = new List<Itens?>.filled(1, null, growable: true);
       json['itens'].forEach((v) {
         itens?.add(new Itens.fromJson(v));
       });

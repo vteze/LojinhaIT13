@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:front_end/widgets/grid_list_view.dart';
 import 'package:front_end/widgets/custom_app_bar.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  MyApp({Key? key}) : super(key: key);
+
+  //static int productId = 0;
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    //não estava sendo usada, por isso comentamos
-    //final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
     return MaterialApp(
       title: 'Lojinha',
       theme: ThemeData(

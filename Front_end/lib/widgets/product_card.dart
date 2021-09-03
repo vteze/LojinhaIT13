@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/models/photo.dart';
+import 'package:front_end/DTOs/Product.dart';
 import 'package:front_end/pages/product_detail.dart';
 
 // Constrói as imagens do gridView e aplica borderRadius nas mesmas
 class ProductCard extends StatelessWidget {
   const ProductCard({
     Key? key,
-    required this.photo,
+    required this.product,
   }) : super(key: key);
 
-  final Photo photo;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
     final Widget image = Material(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         clipBehavior: Clip.antiAlias,
-        child: Image.asset(
-          photo.assetName,
+        child: Image.network(
+          product.urlImagem!,
           fit: BoxFit.cover,
         )
     );
@@ -41,8 +41,8 @@ class ProductCard extends StatelessWidget {
             ),
             child: GridTileBar(
             backgroundColor: Colors.black45,
-            title: _GridTitleText(photo.title),
-            subtitle: _GridTitleText(photo.subtitle),
+            title: _GridTitleText(product.nome!),
+            subtitle: _GridTitleText('R\$ '+product.precoUnitario!),
           ),
           )
         ),
@@ -52,7 +52,7 @@ class ProductCard extends StatelessWidget {
             // Push para a área de detalhe do produto
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ProductDetail(photo))
+              MaterialPageRoute(builder: (context) => ProductDetail(product))
             );
           },
           child: image

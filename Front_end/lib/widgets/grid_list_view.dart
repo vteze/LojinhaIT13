@@ -3,25 +3,51 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:front_end/models/photo.dart';
 import 'package:front_end/widgets/product_card.dart';
-import 'package:front_end/utils/array.dart' as photos;
+import 'package:front_end/DTOs/Product.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class GridListView extends StatelessWidget {
-  const GridListView({
-    Key? key,
-  }) : super(key: key);
+class GridListView extends StatefulWidget {
+  GridListView({Key? key}) : super(key: key);
 
-  // Os widgets estão stateless, mas devem virar stateful caso precisem carregar os produtos do banco de dados
-  // final GridListDemoType type;
+  @override
+  _GridListViewState createState() => _GridListViewState();
+}
 
-  // Array estático de imagens apenas para teste visual
-
-  List<Photo> _photos(BuildContext context) {
-    return photos.list;
+class _GridListViewState extends State<GridListView> {
+  var _products = List<Product>.empty(growable: true);
+  List<Product> _productListBuilder(BuildContext context) {
+    return _products;
   }
 
-  // Construção do layout do grid_list_view
+  // função async para fazer chamada ao backend
+  Future<List<Product>> getProducts() async {
+    // o local host do android e do pc são diferentes. Esse é o ip padrao do android emulator
+    var url = Uri.parse('https://10.0.2.2:5001/produtos'); 
+    var products = List<Product>.empty(growable: true);
+
+    var response = await http.get(url);
+
+    var productList = json.decode(response.body);
+
+    for(Map<String, dynamic> product in productList){
+      products.add(Product.fromJson(product));
+    }
+    return products;
+  }
+
+  // essa função é chamada apenas na primeira criação do widget
+  // para remontar o widget tem que fazer um reload completo(restart) e não o hot reload simples
+  @override
+  void initState() {
+    super.initState();
+    getProducts().then((var products) => setState((){
+      _products = products;
+    }));
+  }
+
+  // função que monda o layout onde os produtos vão se posicionar
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +59,9 @@ class GridListView extends StatelessWidget {
         crossAxisSpacing: 8,
         padding: const EdgeInsets.all(16),
         childAspectRatio: 1,
-        children: _photos(context).map<Widget>((photo) {
+        children: _productListBuilder(context).map<Widget>((product) {
           return ProductCard(
-            photo: photo,
+            product: product,
           );
         }).toList(),
       ),

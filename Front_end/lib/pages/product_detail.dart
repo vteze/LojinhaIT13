@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/models/photo.dart';
+import 'package:front_end/DTOs/Product.dart';
 
 class ProductDetail extends StatefulWidget {
-  ProductDetail(this.photo, {Key? key}) : super(key: key);
+  ProductDetail(this.product, {Key? key}) : super(key: key);
 
-  final Photo photo;
+  final Product product;
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
@@ -28,7 +28,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     child: Stack(children: <Widget>[
                       Hero(
                           tag: "Produto Teste",
-                          child: Image.asset(widget.photo.assetName,
+                          child: Image.network(widget.product.urlImagem!,
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity)),
@@ -50,11 +50,11 @@ class _ProductDetailState extends State<ProductDetail> {
                               // Title
                               Padding(
                                 padding: EdgeInsets.only(top: 16),
-                                child: Text(widget.photo.title,
+                                child: Text(widget.product.nome!,
                                     style: TextStyle(fontSize: 20)),
                               ),
                               // Subtitle
-                              Text(widget.photo.subtitle,
+                              Text('R\$ '+widget.product.precoUnitario!,
                                   style: TextStyle(
                                       color: Theme.of(context).highlightColor,
                                       fontSize: 18.0,
@@ -68,7 +68,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   color: Theme.of(context).primaryColor,
                                 ),
                               ),
-                              Text('Suposta descrição'),
+                              Text(widget.product.descricao!),
                             ]))),
                 // Área do botão
                 TextButton(
@@ -81,7 +81,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                            "${widget.photo.title} foi adicionado ao carrinho"),
+                            "${widget.product.nome} foi adicionado ao carrinho"),
                         duration: Duration(milliseconds: 1000),
                       ),
                     );

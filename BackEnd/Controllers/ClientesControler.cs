@@ -52,28 +52,33 @@ namespace LojinhaIT13.Controllers
         {
             //busca cliente
             var cliente = _basedados.Clientes.Find(idCliente);
-
             if (cliente == null)
             {
                 return NotFound("Cliente nao encontrado");
             }
+
             //busca pedido que não esta fechado
             var pedido = _basedados.Pedidos
-           .Include(p => p.DataEmissao)
-           .Include(p => p.PedidoProdutos)
-           .ThenInclude(pp => pp.Produto)
-           .FirstOrDefault(p => p.ClienteId == idCliente && !p.Fechado());
-
+                .Include(p => p.Cliente)
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
+                .FirstOrDefault(p => p.ClienteId == idCliente && p.DataEmissao == null);
             
             if (pedido == null)
             {
                 pedido = new Pedido();
+                pedido.Cliente = cliente;
+                pedido.PedidoProdutos = new List<PedidoProduto>();
+                _basedados.Pedidos.Add(pedido);
+                _basedados.SaveChanges();
+                pedido = _basedados.Pedidos
+                    .Include(p => p.Cliente)
+                    .Include(p => p.PedidoProdutos)
+                    .ThenInclude(pp => pp.Produto)
+                    .FirstOrDefault(p => p.ClienteId == idCliente && p.DataEmissao == null);
             }
 
-
-            var retorno = PedidoDTO.FromPedido(pedido);  
-            return retorno;          
+            return PedidoDTO.FromPedido(pedido);          
         }
     }
-
 }

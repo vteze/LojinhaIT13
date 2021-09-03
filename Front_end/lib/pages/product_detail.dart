@@ -5,7 +5,11 @@ import 'package:front_end/DTOs/Product.dart';
 // inputs: produto, idPedido
 // output: pedido
 // obj: inserir uma unidade do produto no pedido cujo id seja igual a idPedido, e receber ora um erro a ser tratado, ora um pedido.
-Future<Product> adicionarAoPedido(Product product){}
+// TODO: ao terminar de implementar as funcionalidades de usuário, alterar parâmetros do método para que ele receba o id do pedido do usuário.
+Future<Product> adicionarAoPedido(Product product, int idPedido){
+
+  
+}
 
 
 class ProductDetail extends StatefulWidget {

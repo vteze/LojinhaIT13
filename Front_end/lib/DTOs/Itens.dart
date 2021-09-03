@@ -1,10 +1,10 @@
 class Itens {
-  int codigoProduto;
-  String nomeProduto;
-  int quantidade;
-  int precoUnitario;
-  String urlImagem;
-  String descricao;
+  int? codigoProduto;
+  String? nomeProduto;
+  int? quantidade;
+  int? precoUnitario;
+  String? urlImagem;
+  String? descricao;
 
   Itens(
       {this.codigoProduto,

@@ -1,10 +1,10 @@
 class Pedido {
-  int codigo;
-  String dataEmissao;
-  String nomeCliente;
-  String emailCliente;
-  int valorTotal;
-  List<Itens> itens;
+  int? codigo;
+  String? dataEmissao;
+  String? nomeCliente;
+  String? emailCliente;
+  int? valorTotal;
+  List<Itens?> itens;
 
  Pedido(
       {this.codigo,

@@ -66,6 +66,7 @@ namespace LojinhaIT13.Controllers
             return retorno;
         }
 
+        // TOOD: se não existir um pedido, criar um ao adicionar um produto
         //POST /pedidos/adiciona/{:pedidoId}?produtoId={produtoId}
         [HttpPost]
         [Route("adiciona/{pedidoId}")]

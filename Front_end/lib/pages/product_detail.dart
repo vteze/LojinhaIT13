@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/DTOs/Product.dart';
 
+
+// inputs: produto, idPedido
+// output: pedido
+// obj: inserir uma unidade do produto no pedido cujo id seja igual a idPedido, e receber ora um erro a ser tratado, ora um pedido.
+Future<Product> adicionarAoPedido(Product product){}
+
+
 class ProductDetail extends StatefulWidget {
   ProductDetail(this.product, {Key? key}) : super(key: key);
 

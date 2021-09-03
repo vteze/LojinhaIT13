@@ -33,9 +33,9 @@ namespace LojinhaIT13.Controllers
             
             // Buscar pedido retornando os produtos associados (eager loading)
             var pedido = _basedados.Pedidos
-                .Include(p => p.DataEmissao)
                 .Include(p => p.PedidoProdutos)
                 .ThenInclude(pp => pp.Produto)
+                .Include(p => p.Cliente)
                 .FirstOrDefault(p => p.PedidoId == pedidoId);
 
             if(pedido == null)
@@ -76,9 +76,9 @@ namespace LojinhaIT13.Controllers
         ) {    
             // Buscar pedido retornando os produtos associados (eager loading)
             var pedido = _basedados.Pedidos
-                .Include(p => p.DataEmissao)
                 .Include(p => p.PedidoProdutos)
                 .ThenInclude(pp => pp.Produto)
+                .Include(p => p.Cliente)
                 .FirstOrDefault(p => p.PedidoId == pedidoId);
 
             if(pedido == null)
@@ -112,7 +112,7 @@ namespace LojinhaIT13.Controllers
             });
 
             await _basedados.SaveChangesAsync();
-
+            
             return PedidoDTO.FromPedido(pedido);
         }
     }

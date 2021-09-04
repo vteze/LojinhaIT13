@@ -1,7 +1,8 @@
 //import 'dart:html';
+import 'package:front_end/models/photo.dart';
 import 'package:front_end/models/product.dart';
 import 'package:front_end/widgets/product_grid_list_cart.dart';
-import 'package:front_end/utils/array_cart.dart';
+import 'package:front_end/utils/array_cart.dart' as itens;
 import 'package:front_end/models/product.dart';
 import 'package:flutter/material.dart';
 
@@ -77,6 +78,9 @@ class ShoppingCart extends StatefulWidget {
   @override
   _ShoppingCartState createState() => _ShoppingCartState();
 }
+//  List<Product> item(BuildContext context) {
+//     return itens.list;
+//   }
 
 class _ShoppingCartState extends State<ShoppingCart> {
   @override
@@ -90,9 +94,43 @@ class _ShoppingCartState extends State<ShoppingCart> {
               color: Colors.white, fontSize: 25, fontWeight: FontWeight.w600),
         ),
       ),
-      body:  // CHAMA AQUI O LIST VIEW ->   ListViewHome() 
-      //  
-      ,
+
+
+       body: ListView.builder(
+         itemCount: itens.list.length, 
+         itemBuilder: (BuildContext context, int index) 
+         {  
+           return Card(
+             elevation: 5,
+             margin: EdgeInsets.all(5),
+            child: ListTile
+            (
+              contentPadding: EdgeInsets.only(left: 0, right: 20), //usado para tirar o padding de dentro do ListTile
+              leading: Row( // row que contem (botao mais menos e quantidade) e imagem do item.
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(   //Row onde fica o botão de mais e menos e Quantidade
+                  children: [
+                    IconButton(onPressed: null, icon: Icon(Icons.remove)),
+                    Text(itens.list[index].quantity.toString()),
+                     IconButton(onPressed: null, icon: Icon(Icons.add))
+                  ],
+                ),
+                SizedBox( //Foi usado sizedBox Para regular o tamanho da imagem
+                  width: 50,
+                  height: 50,
+                  child: Image.asset(itens.list[index].assetName),
+                )
+              ],
+            ),
+              title: Text(itens.list[index].title),
+              subtitle: Text(itens.list[index].price.toString()),
+              trailing: Icon(Icons.remove_shopping_cart_outlined),
+            ),
+           );
+         },
+       ),   
+      
       bottomNavigationBar: BottomAppBar(
         color: Theme.of(context).primaryColor,
         child: Padding(

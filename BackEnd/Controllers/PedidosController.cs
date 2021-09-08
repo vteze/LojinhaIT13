@@ -216,6 +216,41 @@ namespace LojinhaIT13.Controllers
 
             return PedidoDTO.FromPedido(pedido);
         }
+
+        [HttpDelete]
+        [Route("carrinho/remove/{pedidoId}")]
+
+        public async Task<ActionResult<PedidoDTO>> RemoveProduto(int pedidoId, [FromQuery] int produtoId)
+        {
+            
+            var pedido = await _basedados.Pedidos
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
+                .Include(p => p.Cliente)
+                .FirstOrDefaultAsync(p => p.PedidoId == pedidoId);
+
+            if (pedido == null)
+            {
+                return BadRequest("Pedido inexistente");
+            }
+
+            if(pedido.DataEmissao != null)
+            {
+                return BadRequest("Pedido já finalizado");
+            }
+
+            var index = pedido.PedidoProdutos.FindIndex(p => p.ProdutoId == produtoId);
+            
+            if(index == -1)
+            {
+                return BadRequest("Produto não está no pedido.");
+            }
+
+            
+            
+            return null;
+        }
+
     }
 }
 

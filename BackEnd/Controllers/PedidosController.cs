@@ -9,6 +9,11 @@ using LojinhaIT13.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cors;
 
+//=========================================================================
+//CODE REVIEW: Implementar atualização do valor do produto quando entrar na tela carrinho 
+//pode ser realizado na feat 6
+//=========================================================================
+
 namespace LojinhaIT13.Controllers
 {
     [ApiController]

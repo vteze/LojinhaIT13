@@ -89,7 +89,7 @@ namespace LojinhaIT13.Controllers
             
         }
 
- //POST /pedidos/adiciona/{:pedidoId}?produtoId={produtoId}
+        //PUT /pedidos/carrinho/adiciona/{:pedidoId}?produtoId={produtoId}
         [HttpPut]
         [Route("carrinho/adiciona/{pedidoId}")]
         public async Task<ActionResult<PedidoDTO>> AumentaQuantidade(
@@ -100,8 +100,6 @@ namespace LojinhaIT13.Controllers
             var pedido = _basedados.Pedidos
                 .Include(p => p.PedidoProdutos)
                 .ThenInclude(pp => pp.Produto)
-                .Include(p => p.PedidoProdutos)
-                .ThenInclude(pro => pro.Quantidade)
                 .Include(p => p.Cliente)
                 .FirstOrDefault(p => p.PedidoId == pedidoId);
 
@@ -116,11 +114,6 @@ namespace LojinhaIT13.Controllers
                 return BadRequest("Pedido já finalizado");
             }
 
-            if (pedido.PedidoProdutos.Find(pp => pp.ProdutoId == produtoId) != null)
-            {
-                return BadRequest("Produto já inserido");
-            }
-
             var produto = await _basedados.Produtos.FindAsync(produtoId);
 
             if(produto == null)
@@ -128,17 +121,23 @@ namespace LojinhaIT13.Controllers
                 return BadRequest("Produto inexistente");
             }
 
-            pedido.PedidoProdutos.Find(p => p.ProdutoId == produtoId).Quantidade++;
-        
+            var pedprod = pedido.PedidoProdutos.Find(p => p.ProdutoId == produtoId);
 
+            if (pedprod == null)
+            {
+                return BadRequest("Produto não inserido no carrinho");
+            }
+
+            pedprod.Quantidade++;
+        
             await _basedados.SaveChangesAsync();
             
             return PedidoDTO.FromPedido(pedido);
         }
 
-
+        //PUT /pedidos/carrinho/diminui/{:pedidoId}?produtoId={produtoId}
         [HttpPut]
-        [Route("carrinho/{pedidoId}")]
+        [Route("carrinho/diminui/{pedidoId}")]
         public async Task<ActionResult<PedidoDTO>> DiminuiQuantidade(
             int pedidoId, 
             [FromQuery] int produtoId) 
@@ -147,8 +146,6 @@ namespace LojinhaIT13.Controllers
             var pedido = _basedados.Pedidos
                 .Include(p => p.PedidoProdutos)
                 .ThenInclude(pp => pp.Produto)
-                .Include(p => p.PedidoProdutos)
-                .ThenInclude(pro => pro.Quantidade)
                 .Include(p => p.Cliente)
                 .FirstOrDefault(p => p.PedidoId == pedidoId);
 
@@ -163,21 +160,29 @@ namespace LojinhaIT13.Controllers
                 return BadRequest("Pedido já finalizado");
             }
 
-            if (pedido.PedidoProdutos.Find(pp => pp.ProdutoId == produtoId) != null)
-            {
-                return BadRequest("Produto já inserido");
-            }
-
             var produto = await _basedados.Produtos.FindAsync(produtoId);
+        
 
             if(produto == null)
             {
                 return BadRequest("Produto inexistente");
             }
+  
+  
+            var pedprod = pedido.PedidoProdutos.Find(p => p.ProdutoId == produtoId);
 
-            pedido.PedidoProdutos.Find(p => p.ProdutoId == produtoId).Quantidade--;
+            if (pedprod == null)
+            {
+                return BadRequest("Produto não inserido no carrinho");
+            }
+
+            if (pedprod.Quantidade <= 1)
+            {
+                return BadRequest("Quantidade menor que 1");
+            }
+            pedprod.Quantidade--;
+            
         
-
             await _basedados.SaveChangesAsync();
             
             return PedidoDTO.FromPedido(pedido);

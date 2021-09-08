@@ -17,7 +17,7 @@ class _UserAuthentication extends State<UserAuthentication> {
   String valorString = 'Usuário';
   bool isSelected = false;
   int? idCliente;
-  var _pedido;
+  var _carrinhoId;
   var _clientes = List<Cliente>.empty(growable: true);
 
   // DISCUTIR COM O PESSOAL A POSSIVEL REMOÇÃO POIS TALVEZ SEJA INUTIL
@@ -37,7 +37,7 @@ class _UserAuthentication extends State<UserAuthentication> {
     return clientes;
   }
 
-  Future<Pedido> getPedidoCliente() async {
+  Future<Pedido> getCarrinhoCliente() async {
     var url = Uri.parse('https://10.0.2.2:5001/clientes/${idCliente}');
     var response = await http.get(url);
     var pedido = json.decode(response.body);
@@ -152,17 +152,17 @@ class _UserAuthentication extends State<UserAuthentication> {
                           onPressed: !isSelected
                               ? null
                               : () => {
-                                    getPedidoCliente().then(
+                                    getCarrinhoCliente().then(
                                       (var pedido) {
                                         setState(() {
-                                          _pedido = pedido;
+                                          _carrinhoId = pedido.codigo;
                                         });
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     GridListView(
-                                                      pedido: _pedido,
+                                                      carrinhoId: _carrinhoId,
                                                       // PASSAR PARA O GRIDVIEW OS DADOS DO PEDIDODTO
                                                     )));
                                       },

@@ -8,15 +8,14 @@ import 'package:front_end/widgets/product_card.dart';
 import 'package:front_end/DTOs/Product.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:front_end/DTOs/pedido.dart';
-import 'package:front_end/pages/user_authentication.dart';
 
 class GridListView extends StatefulWidget {
   GridListView(
-      {Key? key, required this.pedido} /* ADICIONAR O PARAMETRO DO PEDIDODTO*/)
+      {Key? key,
+      required this.carrinhoId} /* ADICIONAR O PARAMETRO DO carrinhoIdDTO*/)
       : super(key: key);
 
-  final Pedido pedido;
+  final int carrinhoId;
 
   @override
   _GridListViewState createState() => _GridListViewState();
@@ -57,9 +56,12 @@ class _GridListViewState extends State<GridListView> {
   // função que monda o layout onde os produtos vão se posicionar
   @override
   Widget build(BuildContext context) {
+    int carrinhoId = widget.carrinhoId;
     return Scaffold(
       // ADICIONAR A CUSTOMAPPBAR AO SCAFFOLD
-      appBar: CustomAppBar(),
+      appBar: AppBar(
+        title: Text("${carrinhoId}"),
+      ),
       // WARNING: Talvez tenha que mudar o contrutor do gridView no futuro
       body: GridView.count(
         restorationId: 'grid_view_demo_grid_offset',

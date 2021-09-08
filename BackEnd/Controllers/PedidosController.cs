@@ -85,6 +85,104 @@ namespace LojinhaIT13.Controllers
             // await _basedados.Pedidos.AddAsync(pedido);
             // await _basedados.SaveChangesAsync();
             // return PedidoDTO.FromPedido(pedido);
+
+            
+        }
+
+ //POST /pedidos/adiciona/{:pedidoId}?produtoId={produtoId}
+        [HttpPut]
+        [Route("carrinho/{pedidoId}")]
+        public async Task<ActionResult<PedidoDTO>> AumentaQuantidade(
+            int pedidoId, 
+            [FromQuery] int produtoId) 
+        {    
+            // Buscar pedido retornando os produtos associados (eager loading)
+            var pedido = _basedados.Pedidos
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pro => pro.Quantidade)
+                .Include(p => p.Cliente)
+                .FirstOrDefault(p => p.PedidoId == pedidoId);
+
+           
+            if(pedido == null)
+            {
+                return BadRequest("Pedido inexistente");
+            }
+
+            if(pedido.DataEmissao != null)
+            {
+                return BadRequest("Pedido já finalizado");
+            }
+
+            if (pedido.PedidoProdutos.Find(pp => pp.ProdutoId == produtoId) != null)
+            {
+                return BadRequest("Produto já inserido");
+            }
+
+            var produto = await _basedados.Produtos.FindAsync(produtoId);
+
+            if(produto == null)
+            {
+                return BadRequest("Produto inexistente");
+            }
+
+            pedido.PedidoProdutos.Find(p => p.ProdutoId == produtoId).Quantidade++;
+        
+
+            await _basedados.SaveChangesAsync();
+            
+            return PedidoDTO.FromPedido(pedido);
+        }
+
+        
+        [HttpPut]
+        [Route("carrinho/{pedidoId}")]
+        public async Task<ActionResult<PedidoDTO>> DiminuiQuantidade(
+            int pedidoId, 
+            [FromQuery] int produtoId) 
+        {    
+            // Buscar pedido retornando os produtos associados (eager loading)
+            var pedido = _basedados.Pedidos
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pro => pro.Quantidade)
+                .Include(p => p.Cliente)
+                .FirstOrDefault(p => p.PedidoId == pedidoId);
+
+           
+            if(pedido == null)
+            {
+                return BadRequest("Pedido inexistente");
+            }
+
+            if(pedido.DataEmissao != null)
+            {
+                return BadRequest("Pedido já finalizado");
+            }
+
+            if (pedido.PedidoProdutos.Find(pp => pp.ProdutoId == produtoId) != null)
+            {
+                return BadRequest("Produto já inserido");
+            }
+
+            var produto = await _basedados.Produtos.FindAsync(produtoId);
+
+            if(produto == null)
+            {
+                return BadRequest("Produto inexistente");
+            }
+
+            pedido.PedidoProdutos.Find(p => p.ProdutoId == produtoId).Quantidade--;
+        
+
+            await _basedados.SaveChangesAsync();
+            
+            return PedidoDTO.FromPedido(pedido);
         }
     }
 }
+
+    

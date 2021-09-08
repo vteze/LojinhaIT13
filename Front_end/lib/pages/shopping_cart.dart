@@ -5,71 +5,9 @@ import 'package:front_end/widgets/product_grid_list_cart.dart';
 import 'package:front_end/utils/array_cart.dart' as itens;
 import 'package:front_end/models/product.dart';
 import 'package:flutter/material.dart';
+import 'package:back_end/Controller/PedidosController.cs';
 
-// ## ESTE É O QUE ESTÁVAMOS TENTANDO DO LISTVIEW
-// class ListViewHome extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView(
-//       padding: const EdgeInsets.all(8),
-//       children: <Widget>[
-//         Card(
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: <Widget>[
-//               const ListTile(
-//                 leading: Icon(Icons.album),
-//                 title: Text('The Enchanted Nightingale'),
-//                 subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.end,
-//                 children: <Widget>[
-//                   TextButton(
-//                     child: const Text('BUY TICKETS'),
-//                     onPressed: () {/* ... */},
-//                   ),
-//                   const SizedBox(width: 8),
-//                   TextButton(
-//                     child: const Text('LISTEN'),
-//                     onPressed: () {/* ... */},
-//                   ),
-//                   const SizedBox(width: 8),
-//                 ],
-//               ),
-//             ],
-//           ),
-//         ),
-//         Card(
-//             child: ListTile(
-//                 title: Text("Anchor"),
-//                 subtitle: Text("Lower the anchor."),
-//                 leading: CircleAvatar(
-//                     backgroundImage: NetworkImage(
-//                         "https://miro.medium.com/fit/c/64/64/1*WSdkXxKtD8m54-1xp75cqQ.jpeg")),
-//                 trailing: Icon(Icons.star))),
-//         Card(
-//             child: ListTile(
-//           title: Text("Alarm"),
-//           subtitle: Text("This is the time."),
-//           leading: CircleAvatar(
-//               backgroundImage: NetworkImage(
-//                   "https://miro.medium.com/fit/c/64/64/1*WSdkXxKtD8m54-1xp75cqQ.jpeg")),
-//           //trailing: Icon(Icons.star)
-//         )),
-//         Card(
-//             child: ListTile(
-//           title: Text("Ballot"),
-//           subtitle: Text("Cast your vote."),
-//           leading: CircleAvatar(
-//               backgroundImage: NetworkImage(
-//                   "https://miro.medium.com/fit/c/64/64/1*WSdkXxKtD8m54-1xp75cqQ.jpeg")),
-//           // trailing: Icon(Icons.star)
-//         ))
-//       ],
-//     );
-//   }
-// }
+
 
 // TODO: implementar a lista de carrinho
 class ShoppingCart extends StatefulWidget {
@@ -111,9 +49,23 @@ class _ShoppingCartState extends State<ShoppingCart> {
               children: [
                 Row(   //Row onde fica o botão de mais e menos e Quantidade
                   children: [
-                    IconButton(onPressed: null, icon: Icon(Icons.remove)),
+                    IconButton(onPressed: async () {
+                      var url = Uri.parse(
+                      'https://10.0.2.2:5001/carrinho/adiciona/$idPedido?produtoId=${product.codigo}',
+                      );
+                      var headerContent = <String, String>{
+                        'Content-Type': 'application/json; charset=UTF-8',
+                      };
+                      final response = await http.put(url, header: headerContent);
+                      if (response.statusCode == 200)
+                        
+                    }, 
+                    icon: Icon(Icons.remove)),
                     Text(itens.list[index].quantity.toString()),
-                     IconButton(onPressed: null, icon: Icon(Icons.add))
+                    IconButton(onPressed: () {
+
+                    },
+                     icon: Icon(Icons.add))
                   ],
                 ),
                 SizedBox( //Foi usado sizedBox Para regular o tamanho da imagem
@@ -174,3 +126,18 @@ class _ShoppingCartState extends State<ShoppingCart> {
     );
   }
 }
+
+ Future<String?> addToCart(Product product, int idPedido) async {
+    var url = Uri.parse(
+      'https://10.0.2.2:5001/Pedidos/adiciona/$idPedido?produtoId=${product.codigo}',
+    );
+    var headerContent = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    final response = await http.post(url, header: headerContent);
+    if (response.statusCode == 200) {
+      Pedido.fromJson(jsonDecode(response.body));
+    } else {
+      return response.body.toString();
+    }
+  } 

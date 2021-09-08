@@ -91,7 +91,7 @@ namespace LojinhaIT13.Controllers
 
  //POST /pedidos/adiciona/{:pedidoId}?produtoId={produtoId}
         [HttpPut]
-        [Route("carrinho/{pedidoId}")]
+        [Route("carrinho/adiciona/{pedidoId}")]
         public async Task<ActionResult<PedidoDTO>> AumentaQuantidade(
             int pedidoId, 
             [FromQuery] int produtoId) 
@@ -136,7 +136,7 @@ namespace LojinhaIT13.Controllers
             return PedidoDTO.FromPedido(pedido);
         }
 
-        
+
         [HttpPut]
         [Route("carrinho/{pedidoId}")]
         public async Task<ActionResult<PedidoDTO>> DiminuiQuantidade(

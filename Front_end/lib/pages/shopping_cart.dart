@@ -14,7 +14,7 @@ class ShoppingCart extends StatefulWidget {
 
 class _ShoppingCartState extends State<ShoppingCart> {
   // Estados do widget
-  int pedidoId = 3;
+  int pedidoId = 2;
   var exceptionMessage;
   PedidoDTO carrinho = PedidoDTO();
 
@@ -168,7 +168,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   ),
                   SizedBox(height: 5.7),
                   Text(
-                    "R\$ 25,00",
+                    "R\$ ${carrinho.valorTotal == null ? "0.00" : carrinho.valorTotal}",
                     style: TextStyle(color: Colors.white),
                   ),
                 ],

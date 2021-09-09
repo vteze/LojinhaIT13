@@ -1,18 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/models/photo.dart';
+import 'package:front_end/DTOs/Product.dart';
+import 'package:front_end/DTOs/Pedido.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:front_end/pages/home.dart';
+
+// obj: inserir uma unidade do produto no pedido cujo id seja igual a idPedido, e receber ora um erro a ser tratado, ora um pedido.
+// TODO: ao terminar de implementar as funcionalidades de usuário, alterar parâmetros do método para que ele receba o id do pedido do usuário.
 
 class ProductDetail extends StatefulWidget {
-  ProductDetail(this.photo, {Key? key}) : super(key: key);
+  ProductDetail(this.product, {Key? key, required this.carrinhoId})
+      : super(key: key);
 
-  final Photo photo;
+  final Product product;
+  final int carrinhoId;
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  // função para adicionar item no carrinho do banco de dados
+  Future<String?> addToCart(Product product, int carrinhoId) async {
+    var url = Uri.parse(
+      'https://10.0.2.2:5001/Pedidos/adiciona/$carrinhoId?produtoId=${product.codigo}',
+    );
+
+    var headerContent = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+
+    final response = await http.post(url, headers: headerContent);
+
+    if (response.statusCode == 200) {
+      return null;
+    } else {
+      return response.body.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    int carrinhoId = widget.carrinhoId;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Padding(
@@ -29,8 +58,8 @@ class _ProductDetailState extends State<ProductDetail> {
                   children: <Widget>[
                     Hero(
                       tag: "Produto Teste",
-                      child: Image.asset(
-                        widget.photo.assetName,
+                      child: Image.network(
+                        widget.product.urlImagem!,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
@@ -61,18 +90,17 @@ class _ProductDetailState extends State<ProductDetail> {
                       Padding(
                         padding: EdgeInsets.only(top: 16),
                         child: Text(
-                          widget.photo.title,
+                          widget.product.nome!,
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
                       // Subtitle
                       Text(
-                        widget.photo.subtitle,
+                        'R\$ ' + widget.product.precoUnitario!,
                         style: TextStyle(
-                          color: Theme.of(context).highlightColor,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w500,
-                        ),
+                            color: Theme.of(context).highlightColor,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w500),
                       ),
                       // Divider
                       Center(
@@ -83,7 +111,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           color: Theme.of(context).primaryColor,
                         ),
                       ),
-                      Text('Suposta descrição'),
+                      Text(widget.product.descricao!),
                     ],
                   ),
                 ),
@@ -97,15 +125,22 @@ class _ProductDetailState extends State<ProductDetail> {
                     borderRadius: BorderRadius.all(Radius.circular(0)),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  // resposta retornado pelo http.post
+                  var exception = await addToCart(widget.product, carrinhoId);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        "${widget.photo.title} foi adicionado ao carrinho",
+                        // verificação se o http.post retornou uma exception para
+                        // mudar o tipo da mensagem mostrada no snackBar
+                        exception is String
+                            ? exception
+                            : 'Produto ${widget.product.nome} foi adicionado ao carrinho',
                       ),
-                      duration: Duration(milliseconds: 1000),
+                      duration: Duration(milliseconds: 1500),
                     ),
                   );
+                  Navigator.of(context).pop();
                 },
                 child: Center(
                   child: Text(

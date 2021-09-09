@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:front_end/models/photo.dart';
+import 'package:front_end/DTOs/Product.dart';
 import 'package:front_end/pages/product_detail.dart';
 
 // Constrói as imagens do gridView e aplica borderRadius nas mesmas
 class ProductCard extends StatelessWidget {
-  const ProductCard({
-    Key? key,
-    required this.photo,
-  }) : super(key: key);
+  const ProductCard({Key? key, required this.product, required this.carrinhoId})
+      : super(key: key);
 
-  final Photo photo;
+  final Product product;
+  final int carrinhoId;
 
   @override
   Widget build(BuildContext context) {
     final Widget image = Material(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         clipBehavior: Clip.antiAlias,
-        child: Image.asset(
-          photo.assetName,
+        child: Image.network(
+          product.urlImagem!,
           fit: BoxFit.cover,
-        )
-    );
+        ));
 
     // Um Material() para conseguir elevar todo o GridTile() que tem um Container()
     // para controlar a altura do footer e o alinhamento do texto e dentro do Container()
@@ -31,32 +29,31 @@ class ProductCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: GridTile(
         footer: Container(
-          alignment: Alignment.centerLeft,
-          height: 45,
-          child: Material(
-            clipBehavior: Clip.antiAlias,
-            color: Colors.transparent,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(6)),
-            ),
-            child: GridTileBar(
-            backgroundColor: Colors.black45,
-            title: _GridTitleText(photo.title),
-            subtitle: _GridTitleText(photo.subtitle),
-          ),
-          )
-        ),
+            alignment: Alignment.centerLeft,
+            height: 45,
+            child: Material(
+              clipBehavior: Clip.antiAlias,
+              color: Colors.transparent,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(6)),
+              ),
+              child: GridTileBar(
+                backgroundColor: Colors.black45,
+                title: _GridTitleText(product.nome!),
+                subtitle: _GridTitleText('R\$ ' + product.precoUnitario!),
+              ),
+            )),
         child: InkResponse(
-          enableFeedback: true,
-          onTap: () {
-            // Push para a área de detalhe do produto
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProductDetail(photo))
-            );
-          },
-          child: image
-        ),
+            enableFeedback: true,
+            onTap: () {
+              // Push para a área de detalhe do produto
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProductDetail(product, carrinhoId: carrinhoId)));
+            },
+            child: image),
       ),
     );
   }

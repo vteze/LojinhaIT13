@@ -1,5 +1,5 @@
 class Product {
-  String? codigo;
+  int? codigo;
   String? nome;
   String? descricao;
   String? urlImagem;
@@ -13,7 +13,7 @@ class Product {
       this.precoUnitario});
 
   Product.fromJson(Map<String, dynamic> json) {
-    codigo = json['codigo'].toString();
+    codigo = json['codigo'];
     nome = json['nome'];
     descricao = json['descricao'];
     urlImagem = json['urlImagem'];

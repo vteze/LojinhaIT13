@@ -5,9 +5,12 @@ import 'package:page_transition/page_transition.dart';
 
 class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  _MyAppState createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Lojinha',
       theme: ThemeData(

@@ -66,6 +66,7 @@ class _GridListViewState extends State<GridListView> {
         children: _productListBuilder(context).map<Widget>((product) {
           return ProductCard(
             product: product,
+            carrinhoId: carrinhoId,
           );
         }).toList(),
       ),

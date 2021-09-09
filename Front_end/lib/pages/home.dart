@@ -3,7 +3,7 @@ import 'package:front_end/pages/user_authentication.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }

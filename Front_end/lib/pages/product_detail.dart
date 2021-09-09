@@ -9,21 +9,21 @@ import 'package:front_end/pages/home.dart';
 // TODO: ao terminar de implementar as funcionalidades de usuário, alterar parâmetros do método para que ele receba o id do pedido do usuário.
 
 class ProductDetail extends StatefulWidget {
-  ProductDetail(this.product, {Key? key}) : super(key: key);
+  ProductDetail(this.product, {Key? key, required this.carrinhoId})
+      : super(key: key);
 
   final Product product;
+  final int carrinhoId;
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
 }
 
 class _ProductDetailState extends State<ProductDetail> {
-  int idPedido = 3; // id Estático apenas para teste
-
   // função para adicionar item no carrinho do banco de dados
-  Future<String?> addToCart(Product product, int idPedido) async {
+  Future<String?> addToCart(Product product, int carrinhoId) async {
     var url = Uri.parse(
-      'https://10.0.2.2:5001/Pedidos/adiciona/$idPedido?produtoId=${product.codigo}',
+      'https://10.0.2.2:5001/Pedidos/adiciona/$carrinhoId?produtoId=${product.codigo}',
     );
 
     var headerContent = <String, String>{
@@ -33,7 +33,7 @@ class _ProductDetailState extends State<ProductDetail> {
     final response = await http.post(url, headers: headerContent);
 
     if (response.statusCode == 200) {
-      Pedido.fromJson(jsonDecode(response.body));
+      return null;
     } else {
       return response.body.toString();
     }
@@ -41,6 +41,7 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
+    int carrinhoId = widget.carrinhoId;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Padding(
@@ -126,7 +127,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
                 onPressed: () async {
                   // resposta retornado pelo http.post
-                  var exception = await addToCart(widget.product, idPedido);
+                  var exception = await addToCart(widget.product, carrinhoId);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(

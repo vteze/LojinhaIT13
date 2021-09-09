@@ -1,3 +1,7 @@
+-- Apagar tabelas antigas
+DROP TABLE ITA13_lojinha.dbo.Carrinhos;
+DROP TABLE ITA13_lojinha.dbo.CarrinhoProduto;
+
 -- Popular tabelas
 -- Tabela Clientes
 INSERT INTO ITA13_lojinha.dbo.Clientes (Nome, Email)
@@ -10,6 +14,10 @@ INSERT INTO ITA13_lojinha.dbo.Clientes (Nome, Email)
 VALUES ('Euclides', 'euclidespastordeusemais@gmail.com');
 INSERT INTO ITA13_lojinha.dbo.Clientes (Nome, Email)
 VALUES ('Peixoto', 'peixotelas@gmail.com');
+INSERT INTO ITA13_lojinha.dbo.Clientes (Nome, Email)
+VALUES ('Brunlida', 'brunilda@gmail.com');
+INSERT INTO ITA13_lojinha.dbo.Clientes (Nome, Email)
+VALUES ('Amanda', 'amandasz@gmail.com');
 
 
 -- Tabela Produtos
@@ -44,33 +52,29 @@ INSERT INTO ITA13_lojinha.dbo.Pedidos (ClienteId, DataEmissao)
 VALUES (1, '2021-07-23');
 INSERT INTO ITA13_lojinha.dbo.Pedidos (ClienteId, DataEmissao)
 VALUES (2, '2021-08-01');
+INSERT INTO ITA13_lojinha.dbo.Pedidos(ClienteId)
+VALUES (3);
 
 
 -- Tabela PedidoProduto
 INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
-VALUES (1, 1, 5, 15);
+VALUES (1, 1, 5, 1.50);
 INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
-VALUES (1, 3, 2, 2);
+VALUES (1, 3, 2, 17.90);
 INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
-VALUES (1, 4, 25, 1);
+VALUES (1, 4, 25, 7.50);
 INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
-VALUES (1, 5, 1, 9.99);
+VALUES (1, 5, 1, 9.90);
 INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
 VALUES (2, 6, 2, 49.90);
 INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
-VALUES (2, 2, 1, 150);
+VALUES (2, 2, 1, 1.98);
 INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
 VALUES (2, 8, 3, 39.20);
-
--- Tabela Carrinhos
-INSERT INTO ITA13_lojinha.dbo.Carrinhos (ClienteId)
-VALUES (3);
-
--- Tabela CarrinhoProduto
-INSERT INTO ITA13_lojinha.dbo.CarrinhoProduto(CarrinhoId, ProdutoId, Quantidade)
-VALUES (1, 9, 1);
-INSERT INTO ITA13_lojinha.dbo.CarrinhoProduto(CarrinhoId, ProdutoId, Quantidade)
-VALUES (1, 11, 5);
-INSERT INTO ITA13_lojinha.dbo.CarrinhoProduto(CarrinhoId, ProdutoId, Quantidade)
-VALUES (1, 12, 12);
+INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
+VALUES (3, 9, 1, 10.50);
+INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
+VALUES (3, 11, 5, 8.90);
+INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
+VALUES (3, 12, 12, 50.00);
 

@@ -6,6 +6,7 @@ class PedidoDTO {
   String? nomeCliente;
   String? emailCliente;
   num? valorTotal;
+  int? clienteId;
   List<ItensDTO?> itens = List<ItensDTO?>.filled(0, null, growable: true);
 
   PedidoDTO(
@@ -21,6 +22,7 @@ class PedidoDTO {
     nomeCliente = json['nomeCliente'];
     emailCliente = json['emailCliente'];
     valorTotal = json['valorTotal'];
+    clienteId = json['clienteId'];
     if (json['itens'] != null) {
       json['itens'].forEach((v) {
         itens.add(new ItensDTO.fromJson(v));

@@ -85,6 +85,61 @@ class _ShoppingCartState extends State<ShoppingCart> {
     }
   }
 
+  void closeCart() async {
+    // requisição ao backend para diminuir ou aumentar a quantidade do produto
+    var url = Uri.parse(
+      'https://10.0.2.2:5001/Pedidos/carrinho/fecha/${widget.carrinhoId}',
+    );
+
+    var headerContent = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+
+    final response = await http.post(url, headers: headerContent);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        carrinho = PedidoDTO();
+      });
+      var url = Uri.parse('https://10.0.2.2:5001/clientes/$idCliente');
+      var response = await http.get(url);
+      var pedido = json.decode(response.body);
+      return PedidoDTO.fromJson(pedido);
+    } else {
+      setState(() {
+        exceptionMessage = response.body.toString();
+      });
+      print(exceptionMessage);
+    }
+  }
+
+  showAlertDialog(BuildContext context) {
+    Widget cancelButton = TextButton(
+      child: Text("Cancelar"),
+      onPressed: () {},
+    );
+    Widget confirmButton = TextButton(
+      child: Text("Confirmar"),
+      onPressed: () {},
+    );
+    //configura o AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      content: Text("Deseja finalizar a compra?"),
+      actions: [
+        cancelButton,
+        confirmButton,
+      ],
+    );
+    //exibe o diálogo
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   // Função chamada toda vez que o widget é contruído.
   // Essa função ta chamando outra função que tá fazendo uma requisição para
   // o backend retornar os produtos do carrinho específico
@@ -208,7 +263,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 width: 120,
                 height: 40,
                 child: ElevatedButton(
-                  onPressed: null,
+                  onPressed: () => showAlertDialog(context),
                   child: Text(
                     "Comprar",
                     style: TextStyle(color: Colors.white),

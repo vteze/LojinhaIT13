@@ -82,19 +82,20 @@ namespace LojinhaIT13.Controllers
       return PedidoDTO.FromPedido(pedido);
     }
 
-    //POST /pedidos/fecha/{:pedidoId}
-    [HttpPost]
-    [Route("fecha/{pedidoId}")]
-    public ActionResult<PedidoDTO> FechaPedido(int pedidoId)
-    {
-      /*  VERIFICAR SE O FechaPedido RETORNA UM PEDIDO NOVO OU NÃO RETORNA NADA */
+    //POST /pedidos/carrinho/fecha/{:pedidoId}
 
-      // Buscar pedido retornando os produtos associados (eager loading)
+    [HttpPost]
+
+    [Route("carrinho/fecha/{pedidoId}")]
+
+    public ActionResult<PedidoDTO> FecharPedido(int pedidoId)
+    {
       var pedido = _basedados.Pedidos
           .Include(p => p.PedidoProdutos)
           .ThenInclude(pp => pp.Produto)
           .Include(p => p.Cliente)
           .FirstOrDefault(p => p.PedidoId == pedidoId);
+
 
       if (pedido == null)
       {
@@ -111,44 +112,33 @@ namespace LojinhaIT13.Controllers
         return BadRequest("Pedido não formulado");
       }
 
-      pedido.DataEmissao = DateTime.Now;
+      bool precisaAtualizar = false;
 
       pedido.PedidoProdutos.ForEach(pp =>
-          pp.ValorUnitario = pp.Produto.Preco
-      );
+      {
+        if (pp.ValorUnitario != pp.Produto.Preco)
+        {
+          precisaAtualizar = true;
+        }
+        pp.ValorUnitario = pp.Produto.Preco;
+      });
+
+      if (precisaAtualizar)
+      {
+        var carrinhoDTO = PedidoDTO.FromPedido(pedido);
+        _basedados.SaveChanges();
+        return Conflict(new
+        {
+          menssagem = "Preços cadastrados no carrinho defasados",
+          carrinho = carrinhoDTO,
+        });
+      }
+      pedido.DataEmissao = DateTime.Now;
 
       var retorno = PedidoDTO.FromPedido(pedido);
 
       _basedados.SaveChanges();
-
       return retorno;
-
-      /* REUTILIZAR FLUXO DE INSERIR PedidoProduto */
-
-      // pedido.PedidoProdutos = new List<PedidoProduto>();
-      // foreach (var item in carrinho.Itens)
-      // {
-      //     var produto = await _basedados.Produtos.FindAsync(item.CodigoProduto);
-      //     if (produto == null)
-      //     {
-      //         return BadRequest($"Produto não encontrado {item.CodigoProduto}");
-      //     }
-      //     pedido.PedidoProdutos.Add(new PedidoProduto 
-      //         {
-      //             // Pedido = pedido,
-      //             // PedidoId = pedido.PedidoId,
-      //             Produto = produto,
-      //             // ProdutoId = produto.ProdutoId,
-      //             Quantidade = item.Quantidade,
-      //             ValorUnitario = produto.Preco
-      //         });
-      //     // pedido.Produtos.Add(produto);
-      // }
-      // await _basedados.Pedidos.AddAsync(pedido);
-      // await _basedados.SaveChangesAsync();
-      // return PedidoDTO.FromPedido(pedido);
-
-
     }
 
     //PUT /pedidos/carrinho/adiciona/{:pedidoId}?produtoId={produtoId}

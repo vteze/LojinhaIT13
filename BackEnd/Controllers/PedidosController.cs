@@ -245,10 +245,11 @@ namespace LojinhaIT13.Controllers
             {
                 return BadRequest("Produto não está no pedido.");
             }
+            pedido.PedidoProdutos.RemoveAt(index);
 
-            
-            
-            return null;
+            await _basedados.SaveChangesAsync();
+
+            return PedidoDTO.FromPedido(pedido);
         }
 
     }

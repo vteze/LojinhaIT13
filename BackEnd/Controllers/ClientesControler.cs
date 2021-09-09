@@ -54,6 +54,7 @@ namespace LojinhaIT13.Controllers
             var cliente = _basedados.Clientes
                 .Include(c => c.Pedidos)
                 .ThenInclude(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
                 .FirstOrDefault(c => c.ClienteId == idCliente);
 
             if (cliente == null)

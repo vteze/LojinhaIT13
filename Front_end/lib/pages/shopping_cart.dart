@@ -1,12 +1,13 @@
 //import 'dart:html';
 import 'package:front_end/DTOs/PedidoDTO.dart';
-import 'package:front_end/utils/array_cart.dart' as itens;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class ShoppingCart extends StatefulWidget {
-  ShoppingCart({Key? key}) : super(key: key);
+  ShoppingCart(this.carrinhoId, {Key? key}) : super(key: key);
+
+  final int carrinhoId;
 
   @override
   _ShoppingCartState createState() => _ShoppingCartState();
@@ -14,16 +15,16 @@ class ShoppingCart extends StatefulWidget {
 
 class _ShoppingCartState extends State<ShoppingCart> {
   // Estados do widget
-  int pedidoId = 2;
   var exceptionMessage;
   PedidoDTO carrinho = PedidoDTO();
 
   // função que faz a requisição ao backend para trazer os itens do carrinho do cliente
   Future<PedidoDTO?> initialCart() async {
     var url = Uri.parse(
-      'https://10.0.2.2:5001/Pedidos/carrinho/$pedidoId',
+      'https://10.0.2.2:5001/Pedidos/carrinho/${widget.carrinhoId}',
     );
 
+    print(url);
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -40,7 +41,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   void incrementOrDecrement(int index, String route) async {
     // requisição ao backend para diminuir ou aumentar a quantidade do produto
     var url = Uri.parse(
-      'https://10.0.2.2:5001/Pedidos/carrinho/$route/$pedidoId?produtoId=${carrinho.itens[index]!.codigoProduto}',
+      'https://10.0.2.2:5001/Pedidos/carrinho/$route/${widget.carrinhoId}?produtoId=${carrinho.itens[index]!.codigoProduto}',
     );
 
     var headerContent = <String, String>{
@@ -61,6 +62,29 @@ class _ShoppingCartState extends State<ShoppingCart> {
     }
   }
 
+  void removeProduct(index) async {
+    var url = Uri.parse(
+        "https://10.0.2.2:5001/Pedidos/carrinho/remove/${widget.carrinhoId}?produtoId=${carrinho.itens[index]!.codigoProduto}");
+
+    print(url);
+
+    var headerContent = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+
+    final response = await http.delete(url, headers: headerContent);
+
+    if (response.statusCode == 200) {
+      setState(() {
+        carrinho = PedidoDTO.fromJson(jsonDecode(response.body));
+      });
+    } else {
+      setState(() {
+        exceptionMessage = response.body.toString();
+      });
+    }
+  }
+
   // Função chamada toda vez que o widget é contruído.
   // Essa função ta chamando outra função que tá fazendo uma requisição para
   // o backend retornar os produtos do carrinho específico
@@ -68,9 +92,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
   void initState() {
     super.initState();
     initialCart().then((cart) {
-      setState(() {
-        carrinho = cart!;
-      });
+      if (cart != null) {
+        setState(() {
+          carrinho = cart;
+        });
+      }
     });
   }
 
@@ -79,6 +105,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   @override
   void dispose() {
     super.dispose();
+    print('dispose');
   }
 
   @override
@@ -135,7 +162,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       height: 50,
                       // o banco de dados tá retornando null para imagem e descrição
                       // por isso fiz estático
-                      child: Image.asset('images/2.jpg'),
+                      child: Image.network(
+                          carrinho.itens[index]!.urlImagem.toString()),
                     )
                   ],
                 ),
@@ -145,7 +173,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 subtitle: Text(
                   carrinho.itens[index]!.precoUnitario.toString(),
                 ),
-                trailing: Icon(Icons.remove_shopping_cart_outlined),
+                trailing: IconButton(
+                  onPressed: () => removeProduct(index),
+                  icon: Icon(Icons.remove_shopping_cart_outlined),
+                ),
               ),
             );
           }

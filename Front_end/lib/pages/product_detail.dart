@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/DTOs/Product.dart';
-import 'package:front_end/DTOs/Pedido.dart';
+import 'package:front_end/DTOs/PedidoDTO.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:front_end/pages/home.dart';
@@ -33,8 +33,10 @@ class _ProductDetailState extends State<ProductDetail> {
     final response = await http.post(url, headers: headerContent);
 
     if (response.statusCode == 200) {
+      print('entrou aqui');
       return null;
     } else {
+      print(response.body);
       return response.body.toString();
     }
   }

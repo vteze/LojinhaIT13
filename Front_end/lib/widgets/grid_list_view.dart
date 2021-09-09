@@ -55,7 +55,7 @@ class _GridListViewState extends State<GridListView> {
   Widget build(BuildContext context) {
     int carrinhoId = widget.carrinhoId;
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(carrinhoId),
       body: GridView.count(
         restorationId: 'grid_view_demo_grid_offset',
         crossAxisCount: 2,

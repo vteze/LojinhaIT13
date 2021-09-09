@@ -4,7 +4,7 @@ import 'package:front_end/widgets/grid_list_view.dart';
 import 'package:front_end/DTOs/cliente.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:front_end/DTOs/pedido.dart';
+import 'package:front_end/DTOs/PedidoDTO.dart';
 
 class UserAuthentication extends StatefulWidget {
   const UserAuthentication({Key? key}) : super(key: key);
@@ -31,11 +31,11 @@ class _UserAuthentication extends State<UserAuthentication> {
     return clientes;
   }
 
-  Future<Pedido> getCarrinhoCliente() async {
-    var url = Uri.parse('https://10.0.2.2:5001/clientes/${idCliente}');
+  Future<PedidoDTO> getCarrinhoCliente() async {
+    var url = Uri.parse('https://10.0.2.2:5001/clientes/$idCliente');
     var response = await http.get(url);
     var pedido = json.decode(response.body);
-    return Pedido.fromJson(pedido);
+    return PedidoDTO.fromJson(pedido);
   }
 
   @override
@@ -113,7 +113,7 @@ class _UserAuthentication extends State<UserAuthentication> {
                                 setState(() {
                                   idCliente = novoValor!.clienteId;
                                   isSelected = true;
-                                  valorString = novoValor!
+                                  valorString = novoValor
                                       .nome!; // onChanged recebe uma String?, por isso '!' acompanha novoValor
                                 });
                               },

@@ -5,7 +5,7 @@ class PedidoDTO {
   String? dataEmissao;
   String? nomeCliente;
   String? emailCliente;
-  double? valorTotal;
+  num? valorTotal;
   List<ItensDTO?> itens = List<ItensDTO?>.filled(0, null, growable: true);
 
   PedidoDTO(

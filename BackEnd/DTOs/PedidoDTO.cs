@@ -9,6 +9,7 @@ namespace LojinhaIT13.Dtos
     {
         public int Codigo { get; set; }
         public DateTime? DataEmissao { get; set; }
+        public int ClienteId {get; set; }
         public string NomeCliente { get; set; }
         public string EmailCliente { get; set; }        
         public decimal ValorTotal { get; set; }
@@ -21,6 +22,7 @@ namespace LojinhaIT13.Dtos
             {
                 Codigo = pedido.PedidoId,
                 DataEmissao = pedido.DataEmissao,
+                ClienteId = pedido.ClienteId,
                 NomeCliente = pedido.Cliente.Nome,
                 EmailCliente = pedido.Cliente.Email,
                 Itens = pedido.PedidoProdutos.Select(pp => PedidoItemDTO.FromPedido(pp)),

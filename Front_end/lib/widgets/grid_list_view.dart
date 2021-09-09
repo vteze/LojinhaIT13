@@ -10,10 +10,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class GridListView extends StatefulWidget {
-  GridListView(
-      {Key? key,
-      required this.carrinhoId} /* ADICIONAR O PARAMETRO DO carrinhoIdDTO*/)
-      : super(key: key);
+  GridListView({Key? key, required this.carrinhoId}) : super(key: key);
 
   final int carrinhoId;
 
@@ -58,11 +55,7 @@ class _GridListViewState extends State<GridListView> {
   Widget build(BuildContext context) {
     int carrinhoId = widget.carrinhoId;
     return Scaffold(
-      // ADICIONAR A CUSTOMAPPBAR AO SCAFFOLD
-      appBar: AppBar(
-        title: Text("${carrinhoId}"),
-      ),
-      // WARNING: Talvez tenha que mudar o contrutor do gridView no futuro
+      appBar: CustomAppBar(),
       body: GridView.count(
         restorationId: 'grid_view_demo_grid_offset',
         crossAxisCount: 2,

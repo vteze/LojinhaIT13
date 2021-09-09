@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:front_end/widgets/grid_list_view.dart';
-// import 'package:front_end/models/photo.dart' as photos;
 import 'package:front_end/DTOs/cliente.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -19,11 +18,6 @@ class _UserAuthentication extends State<UserAuthentication> {
   int? idCliente;
   var _carrinhoId;
   var _clientes = List<Cliente>.empty(growable: true);
-
-  // DISCUTIR COM O PESSOAL A POSSIVEL REMOÇÃO POIS TALVEZ SEJA INUTIL
-  List<Cliente> _clienteListBuilder(BuildContext context) {
-    return _clientes;
-  }
 
   Future<List<Cliente>> getCliente() async {
     // o local host do android e do pc são diferentes. Esse é o ip padrao do android emulator
@@ -55,7 +49,7 @@ class _UserAuthentication extends State<UserAuthentication> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         body: Column(
 
             // Widgets organizados em uma coluna
@@ -84,8 +78,9 @@ class _UserAuthentication extends State<UserAuthentication> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text("Selecione o usuário",
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 23),
+                              style: TextStyle(
+                                  color: Theme.of(context).textSelectionColor,
+                                  fontSize: 23),
                               textAlign: TextAlign.left),
                           // DropdownButton
                           Padding(
@@ -94,18 +89,22 @@ class _UserAuthentication extends State<UserAuthentication> {
                               hint: Text(
                                 valorString,
                                 style: TextStyle(
-                                    fontSize: 18, color: Colors.black),
+                                    fontSize: 18,
+                                    color:
+                                        Theme.of(context).textSelectionColor),
                               ),
                               icon: const Icon(Icons.arrow_drop_down),
                               iconSize: 24,
                               elevation: 16,
                               isExpanded: true,
                               style: TextStyle(
-                                  color: Colors.black), // Cor do texto
+                                  color: Theme.of(context)
+                                      .textSelectionColor), // Cor do texto
                               // Underline do Widget
                               underline: Container(
                                 height: 1,
-                                color: Colors.black, // Cor do underline
+                                color: Theme.of(context)
+                                    .textSelectionColor, // Cor do underline
                               ),
 
                               /* Quando o usuário clica em um item da lista (novoValor),
@@ -119,13 +118,14 @@ class _UserAuthentication extends State<UserAuthentication> {
                                 });
                               },
 
-                              // Sistema de listagem dos usuários (obs: sinto que poderiamos estudar sobre)
                               items: _clientes.map<DropdownMenuItem<Cliente>>(
                                   (Cliente value) {
                                 return DropdownMenuItem<Cliente>(
                                     value: value,
                                     child: Text(value.nome!,
-                                        style: TextStyle(color: Colors.black)));
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textSelectionColor)));
                               }).toList(),
                             ),
                           ),
@@ -138,7 +138,7 @@ class _UserAuthentication extends State<UserAuthentication> {
                       image: AssetImage("images/ratinho.png"),
                       color: !isSelected
                           ? Colors.grey
-                          : Theme.of(context).accentColor,
+                          : Theme.of(context).primaryColor,
                       height: 350,
                       width: 350)),
 
@@ -167,13 +167,12 @@ class _UserAuthentication extends State<UserAuthentication> {
                                                     )));
                                       },
                                     ),
-                                    // REQUISIÇÃO PARA PUXAR O CARRINHO A PARTIR DA VARIAVEL IDCLIENTE
                                   },
                           child: Text("Entrar",
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.black)),
+                                  color: Theme.of(context).textSelectionColor)),
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   !isSelected

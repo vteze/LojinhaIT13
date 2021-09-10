@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:front_end/pages/home.dart';
+import 'package:front_end/stateModels/cartId.dart';
+import 'package:provider/provider.dart';
 
 // Essa é usada para desetivar a verificação do certificado ssl
 // WARNING!!! usar apenas em desenvolvimento, nunca em produção.
@@ -15,5 +17,10 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() {
   HttpOverrides.global = new MyHttpOverrides(); // chamada da classe acima
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => CartId(),
+      child: MyApp(),
+    ),
+  );
 }

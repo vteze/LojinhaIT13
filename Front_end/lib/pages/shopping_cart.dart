@@ -1,13 +1,13 @@
 //import 'dart:html';
 import 'package:front_end/DTOs/PedidoDTO.dart';
+import 'package:front_end/stateModels/cartId.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ShoppingCart extends StatefulWidget {
-  ShoppingCart(this.carrinhoId, {Key? key}) : super(key: key);
-
-  final int carrinhoId;
+  ShoppingCart({Key? key}) : super(key: key);
 
   @override
   _ShoppingCartState createState() => _ShoppingCartState();
@@ -17,14 +17,14 @@ class _ShoppingCartState extends State<ShoppingCart> {
   // Estados do widget
   var exceptionMessage;
   PedidoDTO carrinho = PedidoDTO();
+  int? carrinhoId;
 
   // função que faz a requisição ao backend para trazer os itens do carrinho do cliente
   Future<PedidoDTO?> initialCart() async {
     var url = Uri.parse(
-      'https://10.0.2.2:5001/Pedidos/carrinho/${widget.carrinhoId}',
+      'https://10.0.2.2:5001/Pedidos/carrinho/$carrinhoId',
     );
 
-    print(url);
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -34,14 +34,14 @@ class _ShoppingCartState extends State<ShoppingCart> {
       setState(() {
         exceptionMessage = response.body.toString();
       });
-      print(exceptionMessage);
     }
   }
 
+  // função para incrementar ou decrementar a quantidade do produto
   void incrementOrDecrement(int index, String route) async {
     // requisição ao backend para diminuir ou aumentar a quantidade do produto
     var url = Uri.parse(
-      'https://10.0.2.2:5001/Pedidos/carrinho/$route/${widget.carrinhoId}?produtoId=${carrinho.itens[index]!.codigoProduto}',
+      'https://10.0.2.2:5001/Pedidos/carrinho/$route/$carrinhoId?produtoId=${carrinho.itens[index]!.codigoProduto}',
     );
 
     var headerContent = <String, String>{
@@ -62,11 +62,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
     }
   }
 
+  // função para remover o produto
   void removeProduct(index) async {
     var url = Uri.parse(
-        "https://10.0.2.2:5001/Pedidos/carrinho/remove/${widget.carrinhoId}?produtoId=${carrinho.itens[index]!.codigoProduto}");
-
-    print(url);
+        "https://10.0.2.2:5001/Pedidos/carrinho/remove/$carrinhoId?produtoId=${carrinho.itens[index]!.codigoProduto}");
 
     var headerContent = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -85,26 +84,29 @@ class _ShoppingCartState extends State<ShoppingCart> {
     }
   }
 
+  // requisiçao para fechar o pedido
+  // obs: incompleto
   void closeCart() async {
-    // requisição ao backend para diminuir ou aumentar a quantidade do produto
     var url = Uri.parse(
-      'https://10.0.2.2:5001/Pedidos/carrinho/fecha/${widget.carrinhoId}',
+      'https://10.0.2.2:5001/Pedidos/carrinho/fecha/$carrinhoId',
     );
-
     var headerContent = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     };
-
-    final response = await http.post(url, headers: headerContent);
+    var response = await http.post(url, headers: headerContent);
 
     if (response.statusCode == 200) {
+      // novo estado vazio após fechar pedido
       setState(() {
         carrinho = PedidoDTO();
       });
-      var url = Uri.parse('https://10.0.2.2:5001/clientes/$idCliente');
-      var response = await http.get(url);
-      var pedido = json.decode(response.body);
-      return PedidoDTO.fromJson(pedido);
+      var pedidoFechado = PedidoDTO.fromJson(jsonDecode(response.body));
+      var url = Uri.parse(
+          'https://10.0.2.2:5001/clientes/${pedidoFechado.clienteId}');
+      response = await http.get(url);
+      var novoCarrinho = PedidoDTO.fromJson(jsonDecode(response.body));
+      context.read<CartId>().alterValue(novoCarrinho.codigo!);
+      Navigator.of(context).pop();
     } else {
       setState(() {
         exceptionMessage = response.body.toString();
@@ -113,20 +115,21 @@ class _ShoppingCartState extends State<ShoppingCart> {
     }
   }
 
-  showAlertDialog(BuildContext context) {
+  // popup que abre ao clicar no botão comprar
+  AlertDialog? showAlertDialog(BuildContext context) {
     Widget cancelButton = TextButton(
       child: Text("Cancelar"),
-      onPressed: () {},
+      onPressed: () => Navigator.of(context).pop(),
     );
     Widget confirmButton = TextButton(
       child: Text("Confirmar"),
-      onPressed: () {},
+      onPressed: () => closeCart(),
     );
     //configura o AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
+      title: Text("Aviso!"),
       content: Text("Deseja finalizar a compra?"),
-      actions: [
+      actions: <Widget>[
         cancelButton,
         confirmButton,
       ],
@@ -146,6 +149,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
   @override
   void initState() {
     super.initState();
+    carrinhoId = context.read<CartId>().cartId;
     initialCart().then((cart) {
       if (cart != null) {
         setState(() {
@@ -177,66 +181,79 @@ class _ShoppingCartState extends State<ShoppingCart> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: carrinho.itens.length,
-        itemBuilder: (BuildContext context, int index) {
-          if (carrinho.itens[index] == null) {
-            return Text('');
-          } else {
-            return Card(
-              elevation: 5,
-              margin: EdgeInsets.all(5),
-              child: ListTile(
-                contentPadding: EdgeInsets.only(
-                  left: 0,
-                  right: 20,
-                ), //usado para tirar o padding de dentro do ListTile
-                leading: Row(
-                  // row que contem (botao mais menos e quantidade) e imagem do item.
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      //Row onde fica o botão de mais e menos e Quantidade
-                      children: [
-                        IconButton(
-                          onPressed: () =>
-                              incrementOrDecrement(index, 'diminui'),
-                          icon: Icon(Icons.remove),
-                        ),
-                        Text(carrinho.itens[index]!.quantidade.toString()),
-                        IconButton(
-                          onPressed: () =>
-                              incrementOrDecrement(index, 'adiciona'),
-                          icon: Icon(Icons.add),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      //Foi usado sizedBox Para regular o tamanho da imagem
-                      width: 50,
-                      height: 50,
-                      // o banco de dados tá retornando null para imagem e descrição
-                      // por isso fiz estático
-                      child: Image.network(
-                          carrinho.itens[index]!.urlImagem.toString()),
-                    )
-                  ],
-                ),
-                title: Text(
-                  carrinho.itens[index]!.nomeProduto.toString(),
-                ),
-                subtitle: Text(
-                  carrinho.itens[index]!.precoUnitario.toString(),
-                ),
-                trailing: IconButton(
-                  onPressed: () => removeProduct(index),
-                  icon: Icon(Icons.remove_shopping_cart_outlined),
+      body: carrinho.itens.length == 0
+          ? Center(
+              child: Text(
+                'Carrinho Vazio',
+                style: TextStyle(
+                  color: Theme.of(context).highlightColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-            );
-          }
-        },
-      ),
+            )
+          : ListView.builder(
+              itemCount: carrinho.itens.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (carrinho.itens[index] == null) {
+                  return Text('');
+                } else {
+                  return Card(
+                    elevation: 5,
+                    margin: EdgeInsets.all(5),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.only(
+                        left: 0,
+                        right: 20,
+                      ), //usado para tirar o padding de dentro do ListTile
+                      leading: Row(
+                        // row que contem (botao mais menos e quantidade) e imagem do item.
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            //Row onde fica o botão de mais e menos e Quantidade
+                            children: [
+                              IconButton(
+                                onPressed: () =>
+                                    incrementOrDecrement(index, 'diminui'),
+                                icon: Icon(Icons.remove),
+                              ),
+                              Text(
+                                  carrinho.itens[index]!.quantidade.toString()),
+                              IconButton(
+                                onPressed: () =>
+                                    incrementOrDecrement(index, 'adiciona'),
+                                icon: Icon(Icons.add),
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            //Foi usado sizedBox Para regular o tamanho da imagem
+                            width: 50,
+                            height: 50,
+                            // o banco de dados tá retornando null para imagem e descrição
+                            // por isso fiz estático
+                            child: Image.network(
+                                carrinho.itens[index]!.urlImagem.toString()),
+                          )
+                        ],
+                      ),
+                      title: Text(
+                        carrinho.itens[index]!.nomeProduto.toString(),
+                      ),
+                      subtitle: Text(
+                        'R\$ ' +
+                            carrinho.itens[index]!.precoUnitario.toString(),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () => removeProduct(index),
+                        icon: Icon(Icons.remove_shopping_cart_outlined),
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
       bottomNavigationBar: BottomAppBar(
         color: Theme.of(context).primaryColor,
         child: Padding(

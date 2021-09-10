@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:front_end/widgets/grid_list_view.dart';
+import 'package:front_end/pages/product_list.dart';
 import 'package:front_end/DTOs/cliente.dart';
+import 'package:front_end/stateModels/cartId.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:front_end/DTOs/PedidoDTO.dart';
+import 'package:provider/provider.dart';
 
 class UserAuthentication extends StatefulWidget {
   const UserAuthentication({Key? key}) : super(key: key);
@@ -163,24 +165,23 @@ class _UserAuthentication extends State<UserAuthentication> {
               child: TextButton(
                 onPressed: !isSelected
                     ? null
-                    : () => {
-                          getCarrinhoCliente().then(
-                            (var pedido) {
-                              setState(() {
-                                _carrinhoId = pedido.codigo;
-                              });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => GridListView(
-                                    carrinhoId: _carrinhoId,
-                                    // PASSAR PARA O GRIDVIEW OS DADOS DO PEDIDODTO
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        },
+                    : () {
+                        getCarrinhoCliente().then(
+                          (pedido) {
+                            setState(() {
+                              _carrinhoId = pedido.codigo;
+                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProductList(),
+                              ),
+                            );
+                            var cartId = context.read<CartId>();
+                            cartId.alterValue(_carrinhoId);
+                          },
+                        );
+                      },
                 child: Text(
                   "Entrar",
                   style: TextStyle(

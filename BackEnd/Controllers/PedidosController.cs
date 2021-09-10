@@ -9,11 +9,6 @@ using LojinhaIT13.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Cors;
 
-//=========================================================================
-//CODE REVIEW: Implementar atualização do valor do produto quando entrar na tela carrinho 
-//pode ser realizado na feat 6
-//=========================================================================
-
 namespace LojinhaIT13.Controllers
 {
   [ApiController]
@@ -85,9 +80,7 @@ namespace LojinhaIT13.Controllers
     //POST /pedidos/carrinho/fecha/{:pedidoId}
 
     [HttpPost]
-
     [Route("carrinho/fecha/{pedidoId}")]
-
     public ActionResult<PedidoDTO> FecharPedido(int pedidoId)
     {
       var pedido = _basedados.Pedidos
@@ -127,11 +120,12 @@ namespace LojinhaIT13.Controllers
       {
         var carrinhoDTO = PedidoDTO.FromPedido(pedido);
         _basedados.SaveChanges();
-        return Conflict(new
-        {
-          menssagem = "Preços cadastrados no carrinho defasados",
-          carrinho = carrinhoDTO,
-        });
+        return Conflict(
+            new
+            {
+              menssagem = "Preços cadastrados no carrinho defasados",
+              carrinho = carrinhoDTO,
+            });
       }
       pedido.DataEmissao = DateTime.Now;
 

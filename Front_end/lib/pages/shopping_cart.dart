@@ -121,6 +121,15 @@ class _ShoppingCartState extends State<ShoppingCart> {
         exceptionMessage = response.body.toString();
       });
       print(exceptionMessage);
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Ocorreu um erro ao realizar sua compra.',
+          ),
+          duration: Duration(milliseconds: 3000),
+        ),
+      );
     }
   }
 
@@ -289,14 +298,18 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 width: 120,
                 height: 40,
                 child: ElevatedButton(
-                  onPressed: () => showAlertDialog(context),
+                  onPressed: carrinho.itens.length > 0
+                      ? () => showAlertDialog(context)
+                      : null,
                   child: Text(
                     "Comprar",
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).accentColor),
+                        carrinho.itens.length > 0
+                            ? Theme.of(context).accentColor
+                            : Colors.grey),
                   ),
                 ),
               ),

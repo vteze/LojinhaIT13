@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/DTOs/Product.dart';
-import 'package:front_end/stateModels/cartId.dart';
+import 'package:front_end/DTOs/Pedido.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'package:front_end/pages/home.dart';
+
+// obj: inserir uma unidade do produto no pedido cujo id seja igual a idPedido, e receber ora um erro a ser tratado, ora um pedido.
+// TODO: ao terminar de implementar as funcionalidades de usuário, alterar parâmetros do método para que ele receba o id do pedido do usuário.
 
 class ProductDetail extends StatefulWidget {
-  ProductDetail(this.product, {Key? key}) : super(key: key);
+  ProductDetail(this.product, {Key? key, required this.carrinhoId})
+      : super(key: key);
 
   final Product product;
+  final int carrinhoId;
 
   @override
   _ProductDetailState createState() => _ProductDetailState();
@@ -27,17 +33,15 @@ class _ProductDetailState extends State<ProductDetail> {
     final response = await http.post(url, headers: headerContent);
 
     if (response.statusCode == 200) {
-      print('entrou aqui');
       return null;
     } else {
-      print(response.body);
       return response.body.toString();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    int carrinhoId = context.read<CartId>().cartId;
+    int carrinhoId = widget.carrinhoId;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: Padding(

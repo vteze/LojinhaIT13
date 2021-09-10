@@ -4,9 +4,11 @@ import 'package:front_end/pages/product_detail.dart';
 
 // Constrói as imagens do gridView e aplica borderRadius nas mesmas
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key, required this.product}) : super(key: key);
+  const ProductCard({Key? key, required this.product, required this.carrinhoId})
+      : super(key: key);
 
   final Product product;
+  final int carrinhoId;
 
   @override
   Widget build(BuildContext context) {
@@ -27,34 +29,31 @@ class ProductCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: GridTile(
         footer: Container(
-          alignment: Alignment.centerLeft,
-          height: 45,
-          child: Material(
-            clipBehavior: Clip.antiAlias,
-            color: Colors.transparent,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(6)),
-            ),
-            child: GridTileBar(
-              backgroundColor: Colors.black45,
-              title: _GridTitleText(product.nome!),
-              subtitle: _GridTitleText('R\$ ' + product.precoUnitario!),
-            ),
-          ),
-        ),
-        child: InkResponse(
-          enableFeedback: true,
-          onTap: () {
-            // Push para a área de detalhe do produto
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetail(product),
+            alignment: Alignment.centerLeft,
+            height: 45,
+            child: Material(
+              clipBehavior: Clip.antiAlias,
+              color: Colors.transparent,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(6)),
               ),
-            );
-          },
-          child: image,
-        ),
+              child: GridTileBar(
+                backgroundColor: Colors.black45,
+                title: _GridTitleText(product.nome!),
+                subtitle: _GridTitleText('R\$ ' + product.precoUnitario!),
+              ),
+            )),
+        child: InkResponse(
+            enableFeedback: true,
+            onTap: () {
+              // Push para a área de detalhe do produto
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ProductDetail(product, carrinhoId: carrinhoId)));
+            },
+            child: image),
       ),
     );
   }

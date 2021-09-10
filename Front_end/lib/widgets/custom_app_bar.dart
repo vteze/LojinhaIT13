@@ -5,6 +5,7 @@ typedef SearchCallback = Function(String);
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final preferredSize = new Size.fromHeight(164.0);
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -37,10 +38,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   InkWell(
                     borderRadius: BorderRadius.circular(48.0),
-                    onTap: () async => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ShoppingCart(),
-                      ),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ShoppingCart()),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

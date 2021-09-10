@@ -1,31 +1,32 @@
-import 'ItensDTO.dart';
+import 'Itens.dart';
 
-class PedidoDTO {
+class Pedido {
   int? codigo;
   String? dataEmissao;
   String? nomeCliente;
   String? emailCliente;
-  num? valorTotal;
-  int? clienteId;
-  List<ItensDTO?> itens = List<ItensDTO?>.filled(0, null, growable: true);
+  double? valorTotal;
+  List<Itens?>? itens;
 
-  PedidoDTO(
+  Pedido(
       {this.codigo,
       this.dataEmissao,
       this.nomeCliente,
       this.emailCliente,
-      this.valorTotal});
+      this.valorTotal,
+      this.itens});
 
-  PedidoDTO.fromJson(Map<String, dynamic> json) {
+  Pedido.fromJson(Map<String, dynamic> json) {
     codigo = json['codigo'];
     dataEmissao = json['dataEmissao'];
     nomeCliente = json['nomeCliente'];
     emailCliente = json['emailCliente'];
     valorTotal = json['valorTotal'];
-    clienteId = json['clienteId'];
     if (json['itens'] != null) {
+      // ignore: deprecated_member_use
+      itens = new List<Itens?>.filled(1, null, growable: true);
       json['itens'].forEach((v) {
-        itens.add(new ItensDTO.fromJson(v));
+        itens?.add(new Itens.fromJson(v));
       });
     }
   }
@@ -37,7 +38,9 @@ class PedidoDTO {
     data['nomeCliente'] = this.nomeCliente;
     data['emailCliente'] = this.emailCliente;
     data['valorTotal'] = this.valorTotal;
-    data['itens'] = this.itens.map((v) => v!.toJson()).toList();
+    if (this.itens != null) {
+      data['itens'] = this.itens!.map((v) => v!.toJson()).toList();
+    }
     return data;
   }
 }

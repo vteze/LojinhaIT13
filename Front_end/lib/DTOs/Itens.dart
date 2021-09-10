@@ -1,4 +1,4 @@
-class ItensDTO {
+class Itens {
   int? codigoProduto;
   String? nomeProduto;
   int? quantidade;
@@ -6,7 +6,7 @@ class ItensDTO {
   String? urlImagem;
   String? descricao;
 
-  ItensDTO(
+  Itens(
       {this.codigoProduto,
       this.nomeProduto,
       this.quantidade,
@@ -14,7 +14,7 @@ class ItensDTO {
       this.urlImagem,
       this.descricao});
 
-  ItensDTO.fromJson(Map<String, dynamic> json) {
+  Itens.fromJson(Map<String, dynamic> json) {
     codigoProduto = json['codigoProduto'];
     nomeProduto = json['nomeProduto'];
     quantidade = json['quantidade'];

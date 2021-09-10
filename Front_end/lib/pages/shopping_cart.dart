@@ -107,6 +107,15 @@ class _ShoppingCartState extends State<ShoppingCart> {
       var novoCarrinho = PedidoDTO.fromJson(jsonDecode(response.body));
       context.read<CartId>().alterValue(novoCarrinho.codigo!);
       Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Pedido realizado com sucesso!',
+          ),
+          duration: Duration(milliseconds: 3000),
+        ),
+      );
     } else {
       setState(() {
         exceptionMessage = response.body.toString();

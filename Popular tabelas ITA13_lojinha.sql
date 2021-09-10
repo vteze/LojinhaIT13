@@ -77,4 +77,3 @@ INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, Va
 VALUES (3, 11, 5, 8.90);
 INSERT INTO ITA13_lojinha.dbo.PedidoProduto (PedidoId, ProdutoId, Quantidade, ValorUnitario)
 VALUES (3, 12, 12, 50.00);
-
